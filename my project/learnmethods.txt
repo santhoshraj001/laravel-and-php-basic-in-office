@@ -1,0 +1,387 @@
+
+Part	Meaning
+$_GET =	Read values from URL
+isset() =	Check if value exists
+== means	Compare values
+&&	= Both conditions must be true THIS name is AND Operator
+
+EXAMPLE OPERATORS CODE -  OUTPUT - MEANING OF THE OPERATORS
+2 == "2"	             true	Only value compared
+2 === "2"	             false	Value same but type different
+2 === 2	                 true  	Both value + type same
+
+Operator	Meaning	        Example	      Result
+==	      loose compare	    "5" == 5	TRUE
+===    	  strict compare    "5" === 5	FALSE
+!=	      not equal	         3 != 4	    TRUE
+!==	      strict not equal  "5" !== 5	TRUE
+||        any one condition is true its result is return true THIS name is OR Operator
+
+HTML TAG
+<span> is an inline container used to group small pieces of 
+text so you can style or control them without affecting the entire line.
+example-<p>This is a <span style="color:red;">red</span> word.</p>
+   <A radio button is an input element in HTML that lets the user select only ONE option from a list.>
+
+ajax means = AJAX allows the webpage to communicate with the server (PHP) without refreshing the entire page.
+Only the required part of the page gets updated ✔
+No screen flicker ✔
+Super fast ✔
+Modern UI ✔
+
+JSON = JavaScript Object Notation
+It is a lightweight format to store and transfer data between server (PHP) and browser (JS).
+
+*JavaScript METHODS learn*
+method name = URL.createObjectURL(file)
+Creates a temporary link to the image stored in memory.
+ method name = addEventListener = example for:[input.addEventListener("change", function () { ]
+✔ “addEventListener” = tell JavaScript to do something when an event happens
+✔ “change” = event triggered when user selects a file
+
+Toggle methods means on off method like first click select and second click is unselect
+eg program
+function multiSelect(item) {
+    item.classList.toggle("selected");
+}
+Condition	What toggle does
+If element does NOT have class "selected"	➝ Add the class
+If element already HAS "selected"	➝ Remove the class
+
+So one click adds it, second click removes it.
+
+EXAMPLE PROGRAM AND METHODS EXPLANATION
+function selectTemplate(selected) {
+    document.querySelectorAll(".hover").forEach(function(item) {
+        item.classList.remove("selected");
+    });
+
+    selected.classList.add("selected");
+}
+Method	               What it means
+querySelectorAll()  - Select all matching elementsIt finds all
+                     elements that match a CSS selector (like .hover, #id, div, etc.)
+
+forEach()	        - Loop through each selected element,
+                     It loops through all items (like a list) one by one.
+
+classList.remove()  - Remove a CSS class,
+classList.add()     - Add a CSS class,
+
+
+
+windows shortcuts
+| Shortcut      | Use                 |
+| ------------- | ------------------- |
+| **Win + D**   | Show / hide desktop |
+| **Win + E**   | Open File Explorer  |
+| **Win + L**   | Lock your PC        |
+| **Win + R**   | Open Run dialog     |
+| **Win + I**   | Open Settings       |
+| **Win + S**   | Search              |
+| **Win + X**   | Power user menu     |
+| **Win + Tab** | Task view           |
+| Shortcut      | Use                      |
+| ------------- | ------------------------ |
+| **Ctrl + C**  | Copy                     |
+| **Ctrl + V**  | Paste                    |
+| **Ctrl + X**  | Cut                      |
+| **Ctrl + Z**  | Undo                     |
+| **Ctrl + Y**  | Redo                     |
+| **Ctrl + A**  | Select all               |
+| **Alt + Tab** | Switch between open apps |
+| **Alt + F4**  | Close current window     |
+| **Ctrl + S**  | Save                     |
+| **Ctrl + P**  | Print                    |
+| Shortcut             | Use                 |
+| -------------------- | ------------------- |
+| **Ctrl + N**         | New window          |
+| **Ctrl + Shift + N** | New folder          |
+| **Alt + Enter**      | File properties     |
+| **F2**               | Rename              |
+| **Delete**           | Move to Recycle Bin |
+| **Shift + Delete**   | Permanent delete    |
+| Shortcut             | Use               |
+| -------------------- | ----------------- |
+| **Ctrl + T**         | New tab           |
+| **Ctrl + W**         | Close tab         |
+| **Ctrl + Shift + T** | Reopen closed tab |
+| **Ctrl + Tab**       | Next tab          |
+| **Ctrl + L**         | Address bar       |
+| **Ctrl + R / F5**    | Refresh           |
+| **Ctrl + D**         | Bookmark page     |
+| Shortcut               | Use                 |
+| ---------------------- | ------------------- |
+| **Ctrl + Shift + Esc** | Task Manager        |
+| **Win + Ctrl + D**     | New virtual desktop |
+| **Win + Ctrl + ← / →** | Switch desktops     |
+| **Win + .**            | Emoji panel 😊      |
+
+
+
+----------------LARAVEL LEARN-----------------
+laravel is popular web framework built on php
+------important cmd for laravel------
+composer create-project laravel/laravel myproject ----its for create project folder
+php artisan serve  ----its for start laravel server
+php artisan make:controller PageController ----its for create newcontroller in controller folder
+
+
+
+LARAVEL FOLDER structure
+app/
+ └── Http/
+     └── Controllers/   👉 Logic files
+
+resources/
+ └── views/             👉 HTML / Blade files
+
+routes/
+ └── web.php            👉 Website routes
+
+public/
+ └── index.php          👉 Entry point
+
+database/
+ └── migrations/        👉 Table structure
+
+
+Route means:
+When user opens a URL, what should happen?
+Example:
+Route::get('/', function () {
+    return "Hello Laravel";
+});
+---another one route for adding blade file into route---
+Route::get('/hello', function () {
+    return view ('hello');  -----this is blade file name
+});
+🔹 / → homepage
+🔹 get → HTTP method
+🔹 function → response
+ ----basic controller code for create route from controller-----
+ <?php
+
+namespace App\Http\Controllers;
+
+class PageController extends Controller 
+{
+    public function home()
+    {
+        return view('home'); --------this is blade file name
+    }
+}
+ ---route method from controller-----
+ use App\Http\Controllers\PageController;    ------its important for get pagecontroller access in route
+
+Route::get('/home', [PageController::class, 'home']);
+
+
+--- another syntax ---
+{{ }} → print value .eg <h1>Hello {{ $name }}</h1>
+$name → variable from controller
+
+----------this is layout method and create separate file for adding and easily accessing the header and footer and some other inbuilt contents
+🔹 CONCEPT 2: Layout (MOST CONFUSING – explained slowly)
+STEP 1: Create Layout File
+
+📁 resources/views/layout.blade.php
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Website</title>
+</head>
+<body>
+
+    <h2>Header</h2>
+
+    @yield('content')
+
+    <h2>Footer</h2>
+
+</body>
+</html>
+
+What is @yield?
+
+👉 Placeholder (empty space)
+👉 Child page content comes here
+
+📌 Think:
+
+“Insert content here later”
+
+🔹 STEP 2: Create Child Page
+
+📁 resources/views/home.blade.php  -----this file only add in route
+
+@extends('layout')
+
+@section('content')
+    <h1>Welcome Home Page</h1>
+@endsection
+
+🔹 WHAT EACH SYNTAX MEANS (IMPORTANT)
+@extends('layout')
+
+👉 Use layout.blade.php
+
+@section('content')
+
+👉 Start filling the placeholder named content
+
+@endsection
+
+👉 Stop filling content
+
+@yield('content')
+
+👉 Where content will appear in layout
+What is @include('navbar') ?
+
+@include means 👉 “paste another Blade file here”
+
+-----larvel (php artisan) db migration comment-----
+make:migration   → creates PHP instruction file
+migrate          → executes instruction
+migrations table → remembers it ran
+next migrate     → says "Nothing to migrate"
+
+-----laravel commands------
+php artisan serve = start Laravel development server
+composer create-project laravel/laravel project_name = create new Laravel project
+php artisan list = show all Artisan commands
+php artisan help command_name = show help for a comman
+php artisan route:list = show all application routes
+php artisan route:clear = clear route cache
+php artisan make:controller ControllerName = create controller
+php artisan make:controller ControllerName --resource = create CRUD controller
+php artisan make:model ModelName = create model
+php artisan make:model ModelName -m = create model with migration
+php artisan make:migration create_table_name = create migration file
+php artisan migrate = run database migrations
+php artisan migrate:rollback = undo last migration
+php artisan migrate:reset = undo all migrations
+php artisan migrate:refresh = rollback and re-run migrations
+php artisan migrate:status = show migration status
+php artisan make:seeder SeederName = create seeder file
+php artisan db:seed = run all seeders
+php artisan db:seed --class=SeederName = run specific seeder
+php artisan make:request RequestName = create form validation request
+php artisan make:middleware MiddlewareName = create middleware
+php artisan cache:clear = clear application cache
+php artisan config:clear = clear config cache
+php artisan config:cache = cache config files
+php artisan view:clear = clear compiled views
+php artisan optimize:clear = clear all caches
+php artisan storage:link = link storage folder for uploads
+php artisan make:job JobName = create job class
+php artisan queue:work = run queue worker
+php artisan key:generate = generate application key
+php artisan down = put application in maintenance mode
+php artisan up = bring application back online
+composer dump-autoload = refresh autoload files
+
+--find db name--
+php artisan tinker
+DB::connection()->getDatabaseName();
+
+----database basic concepts in laravel----
+1).env File
+
+Used for project settings
+Stores database details   (eg = DB_DATABASE=laranstd)
+Laravel reads this first
+remove # from default
+2)Migration
+
+Migration = DB structure file
+Written in PHP
+Used to create tables
+Create migration
+(cmd = php artisan make:migration create_larastudent_table)
+up()    → create table
+down()  → delete table
+---if you already created a table no need to create
+another table in migration file simply skip that file---
+3)Common Migration Columns
+$table->id();              // primary key
+$table->string('name');    // text
+$table->integer('age');    // number
+$table->timestamps();      // created_at, updated_at
+
+4)Run Migration
+cmd = php artisan migrate
+
+Creates table in database
+View table in phpMyAdmin
+Model
+Model = table representation
+One model per table
+app/Models/
+Example:
+class Larastudent extends Model
+🔟 $fillable
+Allows mass insert
+protected $fillable = ['name','email','mobile','age'];
+Without this → insert blocked
+1️⃣1️⃣ Timestamps
+Laravel auto uses:
+created_at
+updated_at
+To disable:
+public $timestamps = false;
+1️2️⃣ Route
+Route connects URL → controller
+Route::post('/student/store',[StudentController::class,'store']);
+1️⃣3️⃣ Controller
+
+Handles form logic
+Receives request
+Sends data to model
+public function store(Request $request)
+1️⃣4️⃣ Request Object
+
+Gets form input
+$request->name
+$request->email
+Matches:
+<input name="name">
+1️⃣5️⃣ Insert Data
+
+Larastudent::create([
+  'name' => $request->name,
+  'email' => $request->email
+]);
+Laravel converts this to SQL.
+1️⃣6️⃣ Session Message
+
+return back()->with('success','Saved');
+Shows one-time message
+Stored in session
+1️⃣7️⃣ Session Driver
+
+File (default) → no DB table
+Database → needs sessions table
+1️⃣8️⃣ Common Errors & Meaning
+
+Error	Meaning
+Table not found	Wrong DB or table missing
+Column not found	Column missing
+Nothing to migrate	All migrations already run
+1️⃣9️⃣ Laravel Project Flow
+Form
+ ↓
+Route
+ ↓
+Controller
+ ↓
+Model
+ ↓
+Database
+2️⃣0️⃣ IMPORTANT RULES (REMEMBER)
+✔ Use php artisan serve
+✔ Open 127.0.0.1:8000
+✔ Clear cache after .env change
+✔ Laravel loves created_at, updated_at

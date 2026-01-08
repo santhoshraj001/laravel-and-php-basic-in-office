@@ -1,0 +1,165 @@
+/* style.css - UI for students.php (icon-only calendar) */
+
+/* General body */
+body {
+    background: linear-gradient(to right, #4facfe, #9370DB);
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Heading */
+.ten {
+    text-align: center;
+    color: #fff;
+    font-size: 32px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+/* Message */
+.message-centered {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 20px auto;
+    color: green;
+}
+
+/* Form */
+.student-form {
+    max-width: 480px;
+    background: #ffffff;
+    margin: 40px auto;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+}
+.student-form label { display:block; margin-bottom:6px; font-weight:600; color:#333; }
+.student-form input, .student-form select {
+    width:100%; padding:10px; border-radius:8px; border:1px solid #dcdfe8; margin-bottom:14px;
+}
+.small-note { font-size:13px; color:#666; margin-top:-8px; margin-bottom:12px; }
+.first, .update-btn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(90deg,#0ca931,#07a029);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Table */
+.two { text-align:center; color:#fff; font-size:28px; margin-top:20px; margin-bottom:10px; }
+.data-table {
+    width: 95%; margin: 18px auto 40px auto; border-collapse:collapse; background:#fff; border-radius:8px; overflow:hidden;
+}
+.data-table th { background:#4facfe; color:#fff; padding:12px; text-align:center; }
+.data-table td { padding:10px; border:1px solid #e6e6e6; vertical-align:middle; text-align:center; }
+
+/* Thumbs */
+.table-thumb {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin: 3px;
+    border: 1px solid #ccc;
+    transition: transform 0.15s ease-in-out;
+}
+.table-thumb:hover {
+    transform: scale(1.9);
+    z-index: 10;
+    position: relative;
+}
+.popup-img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin: 6px;
+    border: 1px solid #bbb;
+}
+
+/* Action buttons top */
+.action-buttons-container { align-items: flex-start; width:95%; max-width:1100px; margin:12px auto; display: flex; justify-content:space-between; gap:12px; }
+.download-selected, .delete-selected { margin-top: 10%; padding:8px 14px; border-radius:8px; cursor:pointer; border:none; font-weight:600; }
+.download-selected { background: linear-gradient(90deg,#ff6a00,#ee0979); color:#fff; }
+.delete-selected { background: linear-gradient(90deg,#d00000,#ff1744); color:#fff; }
+
+/* Row action buttons */
+.view-btn, .edit-btn, .delete-btn {
+    padding:6px 12px; border:none; border-radius:6px; cursor:pointer;
+}
+.view-btn { background:#007bff; color:#fff; }
+.view-btn:hover { background:#0056b3; }
+.edit-btn { background:#1ca600; color:#fff; }
+.edit-btn:hover { background:#148000; }
+.delete-btn { background:#c62828; color:#fff; }
+.delete-btn:hover { background:#8e0000; }
+
+/* Popup (view) */
+.popup { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); justify-content:center; align-items:center; z-index:999; }
+.popup-content { background:#fff; padding:18px; border-radius:10px; width:360px; max-height:80vh; overflow:auto; }
+.close-btn { float:right; cursor:pointer; font-size:20px; color:#444; }
+
+/* Pagination */
+.pagination { text-align:center; margin: 18px 0 40px 0; }
+.pagination .btn {
+    display:inline-block;
+    margin:3px;
+    padding:8px 14px;
+    border-radius:6px;
+    background:#4facfe;
+    color:#fff;
+    text-decoration:none;
+    font-weight:600;
+}
+.pagination .btn:hover { background:#0b7adf; }
+.pagination .active { background:#1976d2; }
+
+/* === Calendar icon-only styles === */
+.calendar-filter-box { display:flex; align-items:center; gap:10px; }
+.calendar-icon {
+    font-size:22px;
+    width:40px;
+    height:40px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:8px;
+    background:#0078ff;
+    color:#fff;
+    cursor:pointer;
+    box-shadow:0 2px 6px rgba(0,0,0,0.12);
+    border:none;
+    margin-top: 250%;
+    margin-left: 800%;
+}
+.calendar-popup {
+    position: fixed;
+    z-index:99999;
+    display:none;
+    background:#fff;
+    border-radius:10px;
+    padding:10px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+#calendarArea { width: 300px; max-width: calc(100vw - 40px); }
+.popup-buttons { display:flex; justify-content:space-between; margin-top:8px; gap:8px; }
+.popup-buttons button { flex:1; padding:8px 10px; border-radius:6px; border:none; cursor:pointer; font-weight:600; }
+.popup-buttons button:first-child { background:#28a745; color:#fff; }
+.popup-buttons button:last-child  { background:#dc3545; color:#fff; }
+
+/* Flatpickr footer helper (if needed) */
+.fp-footer { display:flex; justify-content:space-between; padding:8px; background:#f0f0f0; border-top:1px solid #ddd; }
+
+/* Responsive */
+@media (max-width:720px) {
+    .data-table, .student-form { width:95%; }
+    .table-thumb { width:48px; height:48px; }
+    .popup-img { width:90px; height:90px; }
+    .calendar-popup { left:8px !important; right:8px !important; }
+}

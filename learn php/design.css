@@ -1,0 +1,44 @@
+
+.one{
+    background-color: rgb(163, 79, 202);
+    text-align: center;
+    border-radius: 20px;
+    color : white;
+    margin-left: 300px;
+    font-style: italic;
+    
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgb(12, 9, 9);
+    
+}
+body{
+    background-color: rgb(35, 120, 162);
+}
+h1{
+    text-align: center;
+    color: rgb(21, 187, 104);
+}
+th, td{
+    border-color: black;
+    
+    border-style: solid;
+    border-width: 2px
+      
+
+}
+h2{
+    text-align: center;
+    color: blueviolet;
+}
+.form{
+    margin-left: 400px;
+    
+    background-color: rgb(179, 223, 243);
+    width: 400px;
+    padding: 20px;
+    border-radius: 15px;
+    border-width: 3px;
+    border-style: solid;
+    border-color: black;
+}

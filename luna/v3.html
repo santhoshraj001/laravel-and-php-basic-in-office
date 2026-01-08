@@ -1,0 +1,186 @@
+    <script src="df-messenger.js"></script>
+  <df-messenger location="us-central1" project-id="mclansys-gcp" agent-id="3f1ae2a1-b20c-4b9d-b14a-cf9f65d45257" language-code="en" max-query-length="-1" allow-feedback="all">
+
+  
+  <df-messenger-chat-bubble chat-title="" placeholder-text="Type something here...">
+  </df-messenger-chat-bubble>
+
+
+
+</df-messenger>
+
+
+<style>
+ root
+  {
+        --df-messenger-input-background: #ffffff;
+  }
+  svg#send-icon
+   {
+    background: url("https://routenote.com/soft_launch/use_luna_image/form-button.png");
+}
+/* --df-messenger-titlebar-title-font-family:Arial;  --df-messenger-input-font-family:Arial;*/
+  df-messenger {
+    z-index: 999;
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+
+  --df-messenger-chat-border-radius: 3px 3px;
+  --df-messenger-chat-border:none;
+  --df-messenger-chat-window-box-shadow:0px 2px 12px 0px #2904042A;
+  --df-messenger-chat-background: #FFFFFF;
+  --df-messenger-message-user-background: #F5F5F5;
+  --df-messenger-message-bot-writing-background: none;
+  --df-messenger-input-box-focus-border:none;
+  --df-messenger-send-icon-color-active: #798eed;
+  --df-messenger-input-box-padding: 20px;
+  --df-messenger-titlebar-background: #04042A;
+  --df-messenger-titlebar-icon-padding:0px 12px 0px 0px;
+  --df-messenger-message-rich-feedback-background:rgba(19,69,172,0.05);  
+  --df-messenger-message-rich-feedback-border-radius:2px;
+  --df-messenger-message-rich-feedback-submit-font-color: #1345ac;
+  --df-messenger-icon-font-color: #1345AC;
+  --df-messenger-chips-background-hover:#99bbf1;
+  --df-messenger-message-rich-feedback-border-radius:2px;
+  --df-messenger-titlebar-title-align:center;
+  --df-messenger-titlebar-padding:0px 38px;
+  --df-messenger-titlebar-title-font-weight:700;
+  --df-messenger-titlebar-background: #04042A 25px 15px / auto 21px no-repeat url("https://routenote.com/soft_launch/use_luna_image/ai-sparkle.svg");
+  --df-messenger-titlebar-icon-font-color:#ffffff;
+  --df-messenger-titlebar-font-color: #FFFFFF;
+  --df-messenger-chips-background-hover:#99bbf1;
+  --df-messenger-chat-bubble-background: center /  contain  url("https://routenote.com/soft_launch/use_luna_image/ai-light.svg"); 
+ /*hide old chat icon*/
+  --df-messenger-chat-bubble-icon-color:none;
+  --df-messenger-titlebar-icon: url("https://routenote.com/soft_launch/use_luna_image/ai-dark.png");
+/*input text*/
+  --df-messenger-input-background: #ffffff;
+  --df-messenger-input-inner-padding:10px 12px;
+   --df-messenger-input-box-border-radius:none;
+  --df-messenger-input-box-background: #F5F5F5;
+  --df-messenger-input-box-border:none;
+  --df-messenger-input-font-color:#CCCCCC;
+  --df-messenger-input-font-weight:400;
+  --df-messenger-input-max-width:100%;
+  --df-messenger-input-padding:none;
+  --df-messenger-input-gutter:none;
+/*feedback icon*/ 
+--df-messenger-default-border: none !important;
+--df-messenger-message-feedback-icon-border-radius: none !important;
+--df-messenger-default-border-color: none !important;
+--df-messenger-message-feedback-icon-border: 0px;
+--df-messenger-message-feedback-icon-background-hover:none;
+--df-messenger-message-feedback-icon-font-color-active:none;
+--df-messenger-internal-message-feedback-icon-fill:#b879ed00;
+
+/*close icon*/
+--df-messenger-chat-bubble-close-icon:url("https://routenote.com/soft_launch/use_luna_image/close-luna.svg");
+--df-messenger-chat-close-icon:url("https://routenote.com/soft_launch/use_luna_image/close-luna.svg");
+
+/*scroll button*/
+--df-messenger-chat-scroll-button-padding: 8px;
+--df-messenger-chat-scroll-button-container-padding: 8px 16px;
+
+/*input message border design*/
+--df-messenger-message-user-border-bottom-left-radius:none;
+--df-messenger-message-user-border-bottom-right-radius:none;
+--df-messenger-message-internal-border-bottom-right-radius:none;
+--df-messenger-message-user-border-top-right-radius:none;
+--df-messenger-message-internal-border-top-right-radius:none;
+--df-messenger-message-internal-border-top-left-radius:none;
+--df-messenger-message-user-border-top-left-radius:none;
+--df-messenger-chips-border-color: #F5F5F5;
+/*chips*/
+--df-messenger-chips-border-radius: -10px;
+--df-messenger-chips-border-color-hover: #FFFFFF;
+
+--df-messenger-message-feedback-icon-padding: none;
+--df-messenger-message-bot-writing-padding:0px;
+}
+df-messenger-chat-bubble:hover {
+  --df-messenger-chat-bubble-background: center / contain url("https://routenote.com/soft_launch/use_luna_image/ai-light-hover.svg");
+}
+</style>
+<!--<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>-->
+
+<script> 
+
+ async function initChatWithIP() {
+      const waitForMessenger = () => new Promise(resolve => {
+        const check = () => {
+          const df = document.querySelector("df-messenger");
+          if (df) return resolve(df);
+          setTimeout(check, 100);
+        };
+        check();
+      });
+
+      // ✅ Fetch IP first
+      const ipData = await fetch("https://api.ipify.org?format=json").then(r => r.json());
+      const client_ip = ipData.ip;
+
+      // ✅ Wait for df-messenger to load
+      const dfMessenger = await waitForMessenger();
+
+      // ✅ Set query parameters before sending query
+      dfMessenger.setQueryParameters({
+        parameters: {
+          client_ip: client_ip
+        }
+      });
+
+      // ✅ Trigger text query (so params get sent)
+     // dfMessenger.renderCustomText("start");
+      
+     }
+     
+      // ✅ Session idle tracking (15 min)
+  /*let lastInteraction = Date.now();
+
+  function resetMessenger() {
+    const messenger = document.querySelector("df-messenger");
+    if (messenger) messenger.remove();
+
+    setTimeout(() => {
+      const newMessenger = document.createElement("df-messenger");
+      newMessenger.setAttribute("location", "us-central1");
+      newMessenger.setAttribute("project-id", "mclansys-gcp");
+      newMessenger.setAttribute("agent-id", "3f1ae2a1-b20c-4b9d-b14a-cf9f65d45257");
+      newMessenger.setAttribute("language-code", "en");
+      newMessenger.setAttribute("max-query-length", "-1");
+      newMessenger.setAttribute("allow-feedback", "all");
+
+      const chatBubble = document.createElement("df-messenger-chat-bubble");
+      chatBubble.setAttribute("chat-title", "");
+      chatBubble.setAttribute("placeholder-text", "Type something here...");
+      newMessenger.appendChild(chatBubble);
+
+      document.body.appendChild(newMessenger);
+
+      alert("⚠️ Session expired. A new chat has started.");
+      initChatWithIP(); // re-init IP params
+    }, 500);
+  }
+
+  function updateActivity() {
+    lastInteraction = Date.now();
+  }
+
+  document.addEventListener("click", updateActivity);
+  document.addEventListener("keydown", updateActivity);
+
+  // ✅ Check every 1 min
+  setInterval(() => {
+    const idleTime = Date.now() - lastInteraction;
+
+    if (idleTime > 120000) { // 15 minutes (900,000 ms)
+      resetMessenger();
+    }
+  }, 60000);*/
+
+    document.addEventListener("DOMContentLoaded", initChatWithIP);
+
+</script>
+
+ 
