@@ -385,3 +385,1248 @@ Database
 ✔ Open 127.0.0.1:8000
 ✔ Clear cache after .env change
 ✔ Laravel loves created_at, updated_at
+-----upload large file to github using git----
+first go to file path ---> C:\Users\WELCOME\OneDrive\Desktop\Design train
+open cmd in folder and run this command
+git init
+git add .
+git commit -m "initial commit"
+git branch -M main
+git remote add origin https://github.com/USERNAME/REPO_NAME.git
+Do this if GitHub already has README or files==>git pull origin main --allow-unrelated-histories
+git push -u origin main
+Username → GitHub username
+Password → Personal Access Token (eg token generated from github=E3FpZi6ACvje7dFFOqIvzzQ4l4yT3f2LeTTI)
+----- simple notes for remember ------
+git init                  → start git (once)
+git add .                 → add files
+git commit -m "msg"       → save
+git remote add origin URL → connect GitHub (once)
+git pull origin main      → sync GitHub files
+git push                  → upload
+
+----important python command----
+pip list  =showing installed python libraries
+pip show numpy  =To check if a package is installed
+
+----Laravel curd operation concepts----
+1. A route tells Laravel: “When this URL is opened, run this function”
+eg:Route::get('/example', [NewDatabaseController::class, 'index']);
+index is function from newdatabsecontroller
+
+use Illuminate\Support\Facades\DB;    -->Its important for add db qurey in controller
+
+2. Named Routes (Very Important)
+📌 Why we use them
+Avoid hard-coding URLs
+Safer if URL changes later
+eg route: Route::get('/example', [NewDatabaseController::class, 'index'])->name('student.index');
+eg blade: <a href="{{ route('student.index')}}">Cancel</a>     this is ankar tag from blade file
+
+3. Blade Template (.blade.php)
+Blade is Laravel’s HTML + PHP template engine.
+📌 Example
+@if(isset($editData))
+   Update
+@else
+   Submit
+@endif
+👉 Blade makes HTML dynamic.
+REAL eg:
+button type="submit">
+        {{ isset($editData) ? 'Update' : 'Submit' }}
+    </button>
+Logic:
+Insert → Submit
+Edit → Update
+
+4. CSRF Protection (@csrf)
+📌 What is CSRF?
+A security protection to stop fake form submissions.
+📌 Why required?
+Without this:
+❌ Form will fail
+📌 Usage
+@csrf
+Laravel automatically verifies it.
+
+5. Form Method (POST)
+HTML supports only:
+GET
+POST
+So we use:
+method="POST"
+Laravel handles everything else internally.
+
+6. Single Form for Insert & Update
+📌 Concept
+We use one form for:
+Create (Insert)
+Edit (Update)
+📌 How?
+form action="{{ isset($editData) ? route('student.update', $editData->id) : route('student.store') }}"
+
+ its for eg tag for insert and edit in single form
+ <label>Name:</label>
+    <input type="text" name="name" 
+           value="{{ $editData->name ?? '' }}" required>
+    <br><br>
+👉 If data exists → Update
+👉 Else → Insert
+
+7. Query String (?edit=1)
+📌 Meaning
+Extra data passed in URL.
+Example:
+/example?edit=1
+📌 Used for
+Loading edit data
+📌 Controller
+if ($request->has('edit')) {
+    // edit mode
+}
+
+8. Fetching Data from Database
+@foreach($data as $row)
+<tr>
+        <td>{{ $row->id }}</td>
+        <td>{{ $row->name }}</td>
+</tr>     
+Method:
+foreach → PHP loop
+Shows all users from database.
+
+📌 Getting all records
+$data = DB::table('login_table')->get();
+
+📌 Getting single record
+DB::table('login_table')->where('id', 1)->first();
+
+9. Validation (Very Important)
+📌 Why?
+Prevent empty or wrong data
+Security
+📌 Example
+$request->validate([
+    'email' => 'required|email',
+    'qualification => 'required|array'
+]);
+Laravel auto-shows error if invalid.
+
+10. Checkbox Concept (IMPORTANT)
+📌 Why checkbox is special?
+Checkbox sends multiple values.
+📌 Example submitted data
+["SSLC", "HSC", "Degree"]
+
+But database expects:
+SSLC,HSC,Degree
+
+11. implode() (Key Concept)
+📌 What it does
+Converts array → string
+📌 Example
+implode(',', ['SSLC', 'HSC'])
+Output:
+SSLC,HSC
+Used before inserting into DB.
+
+12. explode() (Reverse of implode)
+📌 What it does
+Converts string → array
+📌 Example
+explode(',', 'SSLC,HSC')
+Output:
+['SSLC', 'HSC']
+Used while editing to check checkboxes.
+
+eg :insert and edit checkboxes
+<input type="checkbox" name="qualification[]" value="10th"
+{{ (isset($editData) && in_array('10th', explode(',', $editData->qualification))) ? 'checked' : '' }}>
+10th
+
+Checkbox → multiple selection
+
+qualification[] → array input
+
+explode() → string to array
+
+in_array() → value exists or not
+eg: in_array('10th', array)
+
+Checks:
+👉 “Is 10th present in this array?”
+Result:
+Yes → true
+No → false
+checked → selects checkbox automatically
+
+13. Update Query
+📌 Meaning
+Modify existing record.
+DB::table('login_table')
+  ->where('id', $id)
+  ->update([...]);
+Only that row is updated.
+
+14. Flash Messages (with())
+📌 Meaning
+Temporary message after action.
+📌 Example
+return redirect()->back()->with('success', 'Updated');
+Shown once, then disappears.
+
+15. Why We Used POST for Update (XAMPP)
+📌 Reason
+Apache (XAMPP) struggles with PUT method.
+📌 Safe solution
+Use:
+Route::post('/update', ...);
+Very common in shared hosting.
+
+Flow of your app:
+Form → Route → Controller → Validation → DB → Redirect → Message
+
+-----ONE-LINE MEMORY TRICKS-----
+
+@csrf → Form security
+route() → URL helper
+implode() → Array to string
+explode() → String to array
+where() → Target row
+insert() → New data
+update() → Modify data
+
+-----Delete operation in curd-----
+Controller Method
+public function delete($id)
+{
+    DB::table('login_table')->where('id', $id)->delete();
+    return redirect()->back()->with('success', 'Data Deleted Successfully');
+}
+
+-----EXPLANATION OF THIS delete FUNCTION-----
+public function delete($id)
+→ Creates delete function and receives record ID
+
+DB::table('login_table')
+→ Access database table using Query Builder
+
+where('id', $id)
+→ Finds record where ID matches
+
+delete()
+→ Permanently deletes record from database
+
+redirect()->back()
+→ Redirects to previous page
+
+with('success', ...)
+→ Sends success message to session
+
+This is ankar tag from blade file i am using this for adding named route
+         <td>
+         <a href="{{ route('student.delete', $row->id) }}">Delete</a>
+        </td>
+This is that route
+Route::get('/example/delete/{id}', [NewDatabaseController::class, 'delete'])->name('student.delete');
+
+-----this is radio button insert and edit concept-----
+<input type="radio" name="gender" value="male"
+       {{ (isset($editData) && $editData->gender=='male') ? 'checked' : '' }} required> Male
+
+Explanation:
+If this is edit page
+AND database gender is male
+👉 Then
+automatically select (check) the Male radio button
+👉 Else
+do nothing (leave it unchecked)
+
+-----conditional statement method for session success-----
+@if(session('success'))
+    <p style="color:green">{{ session('success') }}</p>
+@endif
+
+What is happening?
+session('success') → Laravel helper method
+Checks if a success message exists
+Shows message after:
+-Insert
+-Update     one eg: after update the data its show - data updated Successfully(green color)
+-Delete
+
+----OPERATORS----
+1. ?? → Null coalescing operator Used to give a default value when something is NULL or not set
+eg:$value = $a ?? $b;
+Meaning:
+If $a exists and is NOT null → use $a
+Else → use $b
+---Real-Time Laravel Example for this operator (Insert & Edit Form)
+value="{{ $editData->name ?? '' }}"
+
+What happens?
+Situation	          Result
+Insert (no data)	-Empty input
+Edit (data exists)	-Shows existing name
+
+2. Ternary operator ? : Used to write short if–else condition 
+in one line(condition ? value_if_true : value_if_false;)
+----Real-Time Laravel Example for this operator (Edit Form)
+<button>
+{{ isset($editData) ? 'Update' : 'Submit' }}
+</button>
+Meaning:
+Condition	 Button Text
+Edit mode	   Update
+Insert mode	   Submit
+
+-----------methods-----------
+| Method       | Purpose            |
+| ------------ | ------------------ |
+| `route()`    | Generate URL       |
+| `isset()`    | Check edit mode    |
+| `session()`  | Show message       |
+| `explode()`  | String → Array     |
+| `in_array()` | Check value exists |
+| `foreach`    | Loop data          |
+| `@csrf`      | Security           |
+
+-----multipledelete using checkbox-----
+--controller function for multidelete--
+
+DB::table('login_table')
+  ->whereIn('id', $request->ids)
+  ->delete();
+
+sql meaning:DELETE FROM login_table WHERE id IN (2,5,8);
+eg: “Delete all rows from login_table
+where id is IN (2, 5, 8)”
+
+---- easy to understand selects checkboxes ----
+→ clicks Delete Selected
+→ browser sends ids[] in POST request
+→ Laravel route catches request
+→ controller reads ids[]
+→ database deletes matching rows
+→ page reloads with success message
+
+----simple concept of the controller----
+| Action | What user does                |
+| ------ | ----------------------------- |
+| Create | Fill form → Submit            |
+| Read   | See table data                |
+| Edit   | Click Edit → Form auto-filled |
+| Update | Change data → Update          |
+
+| store()         | update()             |
+| --------------- | -------------------- |
+| Inserts new row | Updates existing row |
+| No `where`      | Uses `where(id)`     |
+| First time data | Modify old data      |
+| `insert()`      | `update()`           |
+
+
+🔄 FULL EDIT → UPDATE FLOW (Real-time example)
+
+1️⃣ User clicks Edit on ID = 3
+2️⃣ URL → /example?edit=3
+3️⃣ index() fetches ID 3
+4️⃣ Form auto-filled
+5️⃣ User changes email
+6️⃣ Clicks Update
+7️⃣ update() runs
+8️⃣ DB row ID 3 updated
+9️⃣ Success message shown
+
+-----edit and update logical work-----
+index() – READ + EDIT (2 jobs)
+✅ Job 1: Get all records
+$data = DB::table('login_table')->get();
+
+➡️ Used to show the table data.
+
+✅ Job 2: Prepare edit data
+$editData = null;
+
+➡️ If not editing → form stays empty.
+
+✅ Check edit request
+if ($request->has('edit')) {
+
+When user clicks:
+
+<a href="/example?edit=5">Edit</a>
+
+URL becomes:
+
+/example?edit=5
+
+Laravel gets:
+
+$request->edit = 5;
+
+✅ Fetch one record
+$editData = DB::table('login_table')
+              ->where('id', $request->edit)
+              ->first();
+
+➡️ Gets only one row for editing.
+
+✅ Send to view
+return view('example', compact('data', 'editData'));
+
+Blade can:
+
+Show table → $data
+
+Auto-fill form → $editData
+
+✏️ EDIT (Frontend logic)
+
+Edit link:
+
+<a href="{{ route('student.index', ['edit' => $row->id]) }}">Edit</a>
+
+Flow:
+
+Click Edit → index() → fetch row → form auto-filled
+
+Auto-fill example:
+
+<input type="text" name="name" value="{{ $editData->name ?? '' }}">
+
+🔄 update() – UPDATE record
+How Laravel knows UPDATE?
+
+Form action:
+
+action="{{ route('student.update', $editData->id) }}"
+
+URL:
+
+/student/update/5
+
+Laravel gets:
+
+$id = 5;
+
+Update code
+DB::table('login_table')
+  ->where('id', $id)
+  ->update([
+      'name' => $request->name,
+      'email' => $request->email,
+      'qualification' => implode(',', $request->qualification),
+      'updated_at' => now()
+  ]);
+
+Simple meaning:
+
+“Update only the row where id = 5”
+
+⭐ Important rule
+Without where	With where
+❌ Updates all rows	✅ Updates one row
+updated_at
+'updated_at' => now();
+
+➡️ Saves last modified time.
+
+🧠 ONE-LINE MEMORY
+index() = show + prepare edit  
+edit = fetch one row  
+update() = where(id) → update
+
+-------------------------AJAX CONTINUE---------------------
+
+ // url: "/poc_up3/public/personal/store",    this for create path without named route in ajax
+
+ | Field type   | jQuery value method                    |
+| ------------ | -------------------------------------- |
+| text / email | `$('#id').val()`                       |
+| select       | `$('#id').val()`                       |
+| radio        | `$('input[name=group]:checked').val()` |
+| checkbox     | same as radio (or array)               |
+
+| Method        | Purpose                     |
+| ------------- | --------------------------- |
+| `$.ajax()`    | Send request without reload |
+| `GET`         | Fetch data                  |
+| `forEach()`   | Loop through records        |
+| `${}`         | Insert values               |
+| `.html()`     | Display data                |
+| `loadtable()` | Run function                |
+
+
+
+@CSRF = Cross-Site Request Forgery (To protect your app from fake form submissions (CSRF attacks).)
+POST / PUT / DELETE in Laravel ALWAYS need CSRF token
+
+
+
+.map() = loop + collect values (.map() is used to loop through multiple elements and transform them)
+.get() = convert to array
+Used only when multiple values exist
+eg code:its for collect checkbox values
+skills: $('input[name="skills"]:checked')
+        .map(function(){ 
+            return this.value; 
+        })
+        .get(),
+
+----------------------ERROR XHR------------------------
+XHR means XMLHttpRequest — it’s the object that carries the server’s response back to JavaScript.
+error: function(xhr) {
+    $('#msg').text('An error occurred while saving data.');
+}
+Here, xhr holds details about what went wrong (status code, message, response).
+
+
+$.get() – READ
+$.post() – CREATE
+
+| jQuery    | Normal JS        |
+| --------- | ---------------- |
+| `.val()`  | `.value`         |
+| `.html()` | `innerHTML`      |
+| `.text()` | `innerText`      |
+| `.map()`  | `forEach + push` |
+| `.get()`  | `Array.from()`   |
+| `this`    | current element  |
+| `success` | `.then()`        |
+| `error`   | `.catch()`       |
+
+
+<button type="submit">Submit</button>
+$('#personalform').on('submit', function(e) {
+    e.preventDefault(); // ⛔ stop normal submit
+    savedata();  //function name its for what you want to happen when u click the submit button
+});
+| Using       | Button type                 |
+| ----------- | --------------------------- |
+| AJAX only   | `type="button"` ✅           |
+| Normal form | `type="submit"`             |
+| Both        | `submit + preventDefault()` |
+
+<button type="button" onclick="location.reload()">Reset</button>   (simple method to reset or reload page)
+What does location.reload() do?
+👉 location = current page URL
+👉 reload() = reload the page
+
+-------tailwind css--------
+<p class="text-sm">Small</p>                           
+<p class="text-base">Normal</p>
+<p class="text-lg">Large</p>
+<p class="text-xl">Extra Large</p>
+<p class="text-2xl">Bigger</p>
+<p class="text-3xl">Even Bigger</p>
+<p class="text-4xl">Very Big</p>
+
+text-lg → 18px
+text-xl → 20px     text-xl means font size is set to 1.25rem (20px).
+text-2xl → 24px
+text-3xl → 30px
+
+p-2 = padding: 0.5rem;  /* 8px */
+
+
+| Class  | Meaning      |
+| ------ | ------------ |
+| `m-4`  | all sides    |
+| `mt-4` | top          |
+| `mr-4` | right        |
+| `mb-4` | bottom       |
+| `ml-4` | left         |
+| `mx-4` | left + right |
+| `my-4` | top + bottom |
+--------------------
+| Class   | Value |
+| ------- | ----- |
+| `ml-1`  | 4px   |
+| `ml-2`  | 8px   |
+| `ml-4`  | 16px  |
+| `ml-8`  | 32px  |
+| `ml-16` | 64px  |
+
+<input                                                           rounded = radius
+  class="rnup-border-2 rnup-border-dashed rnup-border-green-500 rnup-rounded-md rnup-p-2 rnup-w-full"
+/>
+
+Tailwind border = border-width + border-style + border-color
+---------radio button style in tailwind------
+1. Increase radio button size in Tailwind CSS
+✔️ Method 1: Using scale-* (BEST & easiest)
+<input type="radio" class="scale-150">
+
+Common sizes
+
+scale-125   /* slightly bigger */
+scale-150   /* medium */
+scale-200   /* large */
+
+👉 Tailwind uses CSS transform:
+transform: scale(1.5);
+
+✔️ Radio with label (clean layout)
+<label class="flex items-center gap-2 text-lg">
+  <input type="radio" class="scale-150">
+  Male
+</label>
+
+✅ 2. Font styles in Tailwind (with examples)
+🔹 Font Family
+<p class="font-sans">Sans font (default)</p>
+<p class="font-serif">Serif font</p>
+<p class="font-mono">Monospace font</p>
+
+🔹 Font Size
+<p class="text-sm">Small text</p>
+<p class="text-base">Normal text</p>
+<p class="text-lg">Large text</p>
+<p class="text-xl">Extra large</p>
+<p class="text-2xl">Very large</p>
+
+🔹 Font Weight
+<p class="font-light">Light</p>
+<p class="font-normal">Normal</p>
+<p class="font-semibold">Semi Bold</p>
+<p class="font-bold">Bold</p>
+
+🔹 Text Style
+<p class="italic">Italic text</p>
+<p class="underline">Underlined</p>
+<p class="line-through">Strike text</p>
+<p class="uppercase">UPPERCASE</p>
+<p class="lowercase">lowercase</p>
+<p class="capitalize">capitalize text</p>
+
+🔹 Styled Text Example (real use)
+<p class="text-xl font-semibold text-blue-600 italic">
+  Welcome to Tailwind CSS
+</p>
+
+✅ 3. Radio button + styled text example
+<label class="flex items-center gap-3 text-lg font-medium text-gray-700">
+  <input type="radio" class="scale-150">
+  Agree Terms
+</label>
+
+| Class              | Purpose                    |
+| ------------------ | -------------------------- |
+| `rnup-mx-auto`     | Center container properly  |
+| `rnup-space-y-4`   | Equal space between fields |
+| `rnup-block`       | Label takes full line      |
+| `rnup-w-full`      | Input full width           |
+| `rnup-p-2`         | Proper padding             |
+| `rnup-text-center` | Center heading             |
+
+
+
+https://routenote-ui-library.web.app/
+user@routenote.com
+ogRishEviSTR
+
+
+upc 5057302420123  melody
+GX38U2606427 IRSC
+
+UPC: 5063766907520
+
+GX38U2606429
+
+/rap 5054316968832
+
+------------------vuejs-------------------------
+
+
+<template>
+  <h2>welcome to second page</h2>
+
+<div id="app">
+    <h2>Simple Vue CRUD</h2>
+
+    <!-- Input Section -->
+    <input type="text" v-model="newUser" placeholder="Enter name">
+    
+    <button @click="addUser">
+        {{ editIndex === null ? "Add" : "Update" }}
+    </button>
+
+    <hr>
+
+    <!-- User List -->
+    <ul>
+        <li v-for="(user, index) in users" :key="index">
+            {{ user }}
+
+            <button @click="editUser(index)">Edit</button>
+            <button @click="deleteUser(index)">Delete</button>
+        </li>
+    </ul>
+</div>
+
+
+
+</template>
+
+
+------------------Use axios instead of fetch and vue-----------------------------
+👉 Axios = is js tool/library that performs AJAX
+🔹 First understand:
+
+AJAX = Technique to send request without page reload
+Axios = JavaScript library that uses AJAX internally
+
+✅ 1️⃣ AJAX
+👉 AJAX is not a library
+👉 It is a technique
+✔ Used to send request to server
+✔ Without reloading the page
+Example idea:
+“Send data in background”
+
+✅ 2️⃣ jQuery
+👉 jQuery is a JavaScript library
+✔ Helps with:
+DOM manipulation
+Events
+Animations
+AJAX
+jQuery can perform AJAX using:
+$.ajax()
+
+So jQuery = big toolbox
+AJAX = one tool inside it
+
+✅ 3️⃣ Axios
+👉 Axios is also a JavaScript library
+✔ But it is mainly used only for:
+Sending HTTP requests (AJAX) | Axios = modern way to do AJAX
+Example:
+axios.get('/users')
+
+| Term   | What it is | Purpose                     |
+| ------ | ---------- | --------------------------- |
+| AJAX   | Technique  | Send request without reload |
+| jQuery | Library    | DOM + AJAX + more           |
+| Axios  | Library    | Only HTTP requests (Sending HTTP requests (AJAX))|
+
+-------------------fetch vs axios------------------
+| Feature               | fetch                 | axios            |
+| --------------------- | --------------------- | ---------------- |
+| Type                  | Built-in JavaScript   | External library |
+| Install needed?       | ❌ No                  | ✅ Yes            |
+| JSON handling         | Manual (`res.json()`) | Automatic        |
+| Error handling        | Manual check          | Better built-in  |
+| Older browser support | Limited               | Better           |
+
+
+                       ----------------------
+<template>
+ 
+<div id="app">
+    <h2>Simple Vue CRUD</h2>
+
+    <!-- Input Section -->
+    <input type="text" v-model="newUser" placeholder="Enter name">
+    
+    <button @click="addUser">
+        {{ editIndex === null ? "Add" : "Update" }}
+    </button>
+
+    <hr>
+
+    <!-- User List -->
+    <ul>
+        <li v-for="(user, index) in users" :key="index">
+            {{ user }}
+
+            <button @click="editUser(index)">Edit</button>
+            <button @click="deleteUser(index)">Delete</button>
+        </li>
+    </ul>
+</div>
+
+</template>
+
+<script>
+export default {
+  methods: {
+    log() {
+      this.$router.push('/second-sample')
+    }
+  }
+}
+</script>
+
+----------------------------------------------------------------------
+
+
+
+🧠 Correct Architecture (Vue + Laravel)
+Controller should NOT return Vue component.
+
+Controller should return:
+JSON (for API)
+OR
+Blade file (root layout)
+
+
+Proper Way To Load Vue Page
+STEP 1: Create Blade File
+Create:
+resources/views/app.blade.php
+
+Inside:
+<!DOCTYPE html>
+<html>
+<head>
+    @vite('resources/js/app.js')
+</head>
+<body>
+    <div id="app"></div>
+</body>
+</html>
+
+1️⃣ Big Picture Architecture (Laravel + Vue SPA)
+Browser
+   ↓
+Laravel (serves main blade file)
+   ↓
+Blade loads Vue (app.js)
+   ↓
+Vue Router controls pages
+   ↓
+Vue components render UI
+   ↓
+Axios calls Laravel API routes
+   ↓
+Laravel Controller returns JSON
+   ↓
+Database
+
+🟢 How It Works
+
+Browser →
+web.php loads vue file →
+Vue loads →
+Axios calls /users →
+Controller returns JSON →
+Vue shows data
+
+remember
+1.created one vue file and import in index.js in router folder
+2.then added route in web.php file
+3.i added the axios route based on the web.php route in script inside the vue file 
+4.then return the database value in json response from controller
+
+<input type="text" v-model="form.name"/>
+🔥 What is v-model?
+v-model is used for two-way data binding.
+That means:
+When user types → value goes into form.name
+If form.name changes → input automatically updates
+So Vue connects input field and JavaScript variable.
+
+---------------axios error handling using catch(error)----------
+axios.post("/users", this.form)
+  .then((response) => {
+    this.message = response.data.message;
+    this.resetForm();
+    this.getUsers();
+  })
+  .catch((error) => {            //.catch() works like xhr error.
+    console.log(error);
+  });
+
+2️⃣ How To Access Error Like XHR
+Inside .catch():
+.catch((error) => {
+  console.log(error.response);        // full response
+  console.log(error.response.data);   // JSON data
+  console.log(error.response.status); // HTTP status code
+
+});
+
+| jQuery -ajax          | Axios                 |
+| ---------------- | --------------------- |
+| error(xhr)       | .catch(error)         |
+| xhr.responseText | error.response.data   |
+| xhr.status       | error.response.status |
+
+In Vue:
+
+✔ Use .then() for success
+✔ Use .catch() for errors
+✔ Check error.response.status
+✔ Store errors inside data()
+✔ Show errors using v-if
+
+----------------comparison of jQuery ajax and axios---------------
+| Project Type  | Best Choice          |
+| ------------- | -------------------- |
+| Plain HTML    | jQuery AJAX          |
+| Laravel Blade | jQuery AJAX or Axios |
+| Vue + Laravel | Axios                |
+| React         | Axios / fetch        |
+
+| Term       | What it is                |
+| ---------- | ------------------------- |
+| JavaScript | Programming language      |
+| jQuery     | JS library                |
+| AJAX       | Technique to send request |
+| Axios      | Library to do AJAX        |
+| fetch()    | Built-in JS AJAX method   |
+
+✅ Always use:
+
+-> data()
+-> reactive variables
+-> v-if
+-> {{ }}
+
+Vue automatically updates DOM for you.
+
+<?php
+
+namespace App\Http\Controllers;
+use Illuminate\Support\Facades\DB;
+
+use Illuminate\Http\Request;
+
+class newVueController extends Controller
+{
+    //
+    // Get All Users
+    public function index()
+    {
+        $users = DB::table('vue_store')->get();
+        return response()->json($users);
+    }
+
+    // Insert User
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:20',
+            'place' => 'required|string|max:255',
+        ]);
+        DB::table('vue_store')->insert([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'place' => $request->place,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        return response()->json(['message' => 'User Added']);
+    }
+
+    // Update User
+    public function update(Request $request, $id)
+    {
+        DB::table('vue_store')
+            ->where('id', $id)
+            ->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'place' => $request->place,
+                'updated_at' => now()
+            ]);
+
+        return response()->json(['message' => 'User Updated']);
+    }
+
+    // Delete User
+    public function destroy($id)
+    {
+        DB::table('vue_store')->where('id', $id)->delete();
+
+        return response()->json(['message' => 'User Deleted']);
+    }
+}
+
+| Concept   | Direction       |
+| --------- | --------------- |
+| Props     | Parent ➜ Child  |
+| Emit      | Child ➜ Parent  |
+| Computed  | Calculate value |
+| Watch     | Detect change   |
+| Lifecycle | Auto run        |
+| v-for     | Loop data       |
+| Router    | Page navigation |
+
+| Directive | Purpose         |
+| --------- | --------------- |
+| `v-if`    | Conditional     |
+| `v-else`  | Else condition  |
+| `v-show`  | Show/Hide       |
+| `v-for`   | Loop            |
+| `v-model` | Two-way binding |  <input type="text" class="input" v-model="newUser" placeholder="Enter your name"/>
+| `v-bind`  | Bind attribute  |v-bind :	Attribute bind
+| `v-on`    | Events          |v-on @	Event
+
+
+-----------------------------vue tutorial from yt this example code have inside the vue_yt folder--------------------------
+
+1.What is vue --(directed by enan you)
+2.setup and installation
+3.vue cli
+4.vue devtools
+5.employee CRUD
+6.vue file structure
+7.creating a component
+8.loops
+9.working with forms
+10.event listeners
+11.methods
+12.emitting events to the Parent
+13.retrieving events from the Child
+14.basic form validation
+15.computer properties
+16.conditionls
+17.adding a reference
+18.making asynchronous rest api calls
+19.Lifecycle methods
+20.deploying production build
+
+
+BASIC KNOW TO LEARN VUE = html,css,js basic(es6 syntax),node.js and npm ,REST API
+
+1.What is vue --(directed by enan you)
+-> open source front end js framework, used to imporve user experience and fast loading
+-> view layer of an MVC application
+(MVC)
+M - used and work for adding DB works
+V - used and work for UI (vue)
+C - work between M and V , like a backend functionality
+
+2.setup and installation
+Two ways: (static html and vue cli)
+-> static html- injected into a static html file(directly add the vue methods in html code)
+  - adding the vue packaged script link from code and add on the html head
+      
+  example code:
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue Test</title>
+    <script src="https://unpkg.com/vue@3"></script>  // this is that vue packaged link
+</head>
+<body>
+    <div id="app">
+        <h1>{{ message }}</h1>
+    </div>
+
+    <script>
+        const{ createApp } = Vue;
+        createApp({
+            data() {
+                return {
+                    message: 'Hello Vue!'
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
+
+  - <p {{message}} /p> - text interpolation
+  - .mount(#app) - chainmethod (connect the div tag using id name of app)
+  - render means vue gived result after all the vue operations 
+
+-> vue cli - vue command line interface
+ 
+ - main.js  
+                           
+
+3.vue cli
+
+4.vue devtools
+ - install vue devtool extention and set in browser and show in developer tools(ctrl+shift+i)
+
+5.employee CRUD
+
+6.vue file structure
+ - <template>
+ - <script>
+ - <style>
+ example:
+ <template></template>
+ <script>
+     export default {
+        name: 'component-name',
+     }
+ </script>
+ <style scoped></style>      ----> scoped used to add this style only in this template not other template
+
+7.creating a component
+ -> creating separate component for separate fields and import in one main file
+ example:
+  -> employee_table.vue
+  -> employee_form.vue
+  -> employee_list.vue   ---- import that employee_table and employee_form in this component in the top of script
+                               tag(add this two component in this single component)
+example for:
+    <html>
+<head>
+ 
+    <script src="https://unpkg.com/vue@3"></script>
+</head>
+<body>
+  <h1>employee list</h1>
+
+    <script>
+       import employee_form from '...'
+       import employee_table from '...'
+       import HelloWorld from './components/HelloWorld.vue'   //its sample import method of example another component
+
+    </script>
+</body>
+</html>
+
+7.5) - DATA
+-> (DOM)- change data automatically based on the html change (its work like browser give api to vue)
+ 
+8.loops
+-> v-for (employee in employees)
+
+9.working with forms
+-> create a form in separate vue file and add in parent component
+example:
+eg code is employee_forms.vue file
+ 
+10.event listeners
+ --> its means do something after click the button using different functions
+     eg:(click,submit,keypress)
+
+     ->(v-on:submit) or (@submit)  --- its means adding submit event
+     ->(v-on:submit.prevent="handlesubmit) or (@submit.prevent="handlesubmit)  = .prevent used to stop loading the page ,use in js like(event.preventDefault();)
+                                                                                  and we use handlesubmit function
+
+11.methods
+ ->methods are used to create function 
+ 
+12.emitting events to the Parent
+ ->sending event
+ props --parent to child component
+ emit ---child to parent component   (sending datas or events)
+ eg:this.$emit('employee-updated', newValue)  //its send to parent compont
+
+13.retrieving events from the Child
+ -> receives data and events form child 
+ eg: <Employee-Forms @employee-updated="receiveEmployee" @employee-details="receiveDetails"/> // @employee-updated this is event and emit name from child
+  methods: {
+     receiveEmployee(data) {
+    console.log("From Child:", data)
+  },
+  receiveDetails(employee) {
+    const newEmployee = { ...employee, id: this.employees.length + 1 }  // this is new object and this is add id property in form data and this is one way data flow from child to parent component
+    this.employees = [...this.employees, newEmployee]  //(...this.employees means old employees array) this is push form data to employees array and this is one way data flow from child to parent component
+   //  this.employees.push(employee)   //this is another same method to add value in employees array
+  },
+
+}
+
+14.basic form validation
+   --> showing required field alert incase we submit form without fill the data
+   --> simple method
+     -->create reactive empty variable in data
+     -->create one function like validform for if check the field is empty 
+        eg:validateForm() {
+           this.errors = {}
+
+    if (!this.employee.name) {
+      this.errors.name = "Name is required"
+    }
+    --> then we add this function in form save function
+    eg: handlesubmit(){
+  if (!this.validateform) {
+    return
+  }  
+        this.$emit('employee-details', this.employee) 
+       
+    }, 
+
+15.computed properties
+ -->its work only if true and calculate values and does not calculate until this data changed 
+ -->using easily render and fast
+ (===) three equal means strictly field empty or same value and same datatype
+
+16.conditionls
+17.adding a reference
+18.making asynchronous rest api calls
+19.Lifecycle methods
+20.deploying production build
+
+
+
+--------------------pass data from parent to child-----------------
+eg:
+app.vue-----(parent)
+<Employee-Table :employees="employees"/>
+What happens?
+: means v-bind
+Parent passes its employees data
+Child component receives it
+
+<script>
+export default {
+  data() {
+    return {
+      employees: [
+        {id: 1, name: 'John Doe', email: 'john@example.com', 
+        office: 'Covai', age: 25, salary: 55000 },   //this is reactive data
+        {id: 2, name: 'Jane Smith', email: 'jane@example.com', 
+        office: 'Chennai', age: 30, salary: 60000 }, // this name is one property and all fields name is call like a property
+      ],
+    }
+  },
+}
+</script>
+
+employee_table.vue----(child)
+----this is child component of employee_table.vue------
+<tbody>
+                <tr v-for="employee in employees" :key="employee.id">
+                    <td>{{ employee.name }} test</td>
+                    <td>{{ employee.email }}</td>
+                    <td>{{ employee.office }}</td>
+                    <td>{{ employee.age }}</td>
+                    <td>{{ employee.salary }}</td>
+                    
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</template>
+<script>
+export default {
+    name: 'Employee-Table' ,  // this is component name use in app.vue inside template tag
+    props: {
+        employees: Array, // this data type is array and this is to receive data from parent component (app.vue)
+    }  
+}
+
+</script>
+
+Reactive data = data that automatically updates the view when its value changes.
+
+
+-----------project inside commands explanation-------------
+
+ <Employee-Forms @update-name="receiveName" @employee-updated="receiveEmployee" @employee-details="receiveDetails"/> <!-- this @employee-updated  this is custom emit event name from employee_form and receiveEmployee is method name -->
+                                                
+  <Employee-Table :employees="employees"/>   <!-- this :employees="employees" this is attribute call in data function reactive datas (key:peoperty)  we can use in child component like a props-->
+                                                <!-- : means v-bind
+                                                      Parent passes its employees data
+                                                     Child component receives it as a prop and displays it in a table -->
+
+<------------------------------other commands continue on component files inside vue_yt folder--------------------------------->
