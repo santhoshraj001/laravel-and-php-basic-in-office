@@ -1,3 +1,9 @@
+| Method   | Purpose                    |
+| -------- | -------------------------- |
+| **GET**  | Fetch / display data       |
+| **POST** | Send / store / update data |
+|  **PUT** |       update data          |
+|**DELETE**|    delete data             |
 
 Part	Meaning
 $_GET =	Read values from URL
@@ -1630,3 +1636,356 @@ Reactive data = data that automatically updates the view when its value changes.
                                                      Child component receives it as a prop and displays it in a table -->
 
 <------------------------------other commands continue on component files inside vue_yt folder--------------------------------->
+
+       ---------------params----------------
+this.$router.push({ name:'marks', params:{ id:id } })   // params = data passed through the URL path 
+              (think like (params= URL variable))
+params = values passed inside the URL to identify a specific record or page.
+        -------------------------------------
+     ----Database table join method in controller or other places----
+
+| JOIN       | Meaning                        |
+| ---------- | ------------------------------ |
+| INNER JOIN | Only matching data             |
+| LEFT JOIN  | All employees + marks if exist | -->  //The table written in DB::table() is ALWAYS the LEFT table. AND 
+                                                      ->leftJoin('tablename',     // leftJoin() table   → RIGHT TABLE
+| RIGHT JOIN | Opposite of left               |
+| FULL JOIN  | Everything                     |
+
+
+------------------python--------------------
+import sys
+salary = int(sys.argv[1])
+bonus = salary * 0.10
+print(int(bonus))
+
+| Method       | Purpose                     |
+| ------------ | --------------------------  |
+| `import sys` | Access system functions     |
+| `sys.argv`   | Get command line arguments  |
+| `int()`      | Convert string to integer   |
+| `print()`    | Output result               |
+| `trim()`     |Remove extra spaces and lines|
+
+| Code                   | Meaning                    |
+| ---------------------- | -------------------------- |
+| `querySelectorAll`     | Select multiple elements   |
+| `addEventListener`     | Listen for user action     |
+| `prompt()`             | Get input from user        |
+| `classList.contains()` | Check clicked element type |
+| `getAttribute()`       | Get data from HTML         |
+| `hours += 12`          | Convert PM → 24-hour       |
+
+.remove() for delete
+.setProp() for update
+
+-------------authenticatioin-------------
+Laravel Breeze is a simple authentication starter kit for Laravel.
+
+👉 In short:
+It gives you ready-made login, registration, logout, and 
+password reset features so you don’t have to build them from scratch.
+1)
+composer require laravel/breeze --dev
+php artisan breeze:install                  //we used this breeze for this concept
+npm install && npm run dev
+php artisan migrate
+2)
+AuthenticatedSessionController.php file changes
+    public function store(LoginRequest $request): RedirectResponse
+    {
+        $request->authenticate();
+        $request->session()->regenerate();
+        // return redirect()->intended(route('dashboard', absolute: false));  //THIS IS OLD ONE
+        return redirect()->intended('/std');     //this is main change for after login which will show
+    }
+
+    SHORT WORKING FUNCTION
+🔹 Auth::attempt()
+👉 Check login credentials
+Auth::attempt() = checks if the given email and password are correct
+by comparing them with the database, and if they match, it logs the user in.
+
+🔹 Hash::make()
+👉 Encrypt password
+
+🔹 auth()->user()
+👉 Get current logged user
+
+🔹 middleware('auth')
+👉 Protect routes
+
+🔹 redirect()->intended()
+👉 Redirect after login
+
+
+ users table (Database)
+
+Stores login data:
+
+column	      purpose
+email	   login username
+password   hashed password
+
+Hashed password = a password converted into a secure,
+unreadable string using a one-way encryption process (cannot be reversed back).
+
+login process:
+1.(/register)   // for register the new user then view the registered data on the users table
+2.(/login)      // login with that registered data
+3.(/dashboard)   // dashboard show the registered data and logout and edit option
+
+workflow sample:
+User enters login
+        ↓
+Controller receives data
+        ↓
+Check email in DB
+        ↓
+Check password (Hash)
+        ↓
+If correct → create session
+        ↓
+User logged in
+        ↓
+Middleware allows access
+
+--------------POSTMAN---------------
+Postman is a popular tool used by developers to test APIs (Application Programming Interfaces) 
+easily without writing full frontend code.
+🔹 What is Postman?
+Postman is a software application that allows you to:
+
+Send HTTP requests (GET, POST, PUT, DELETE)
+View responses from a server
+Test backend APIs during development
+
+👉 In simple words:
+Instead of creating a UI, you can directly talk to your backend using Postman.
+1. What Postman actually does
+👉 Postman is just a client (like browser)
+It:
+Sends request (GET, POST, PUT, DELETE)
+Receives response (JSON)
+👉 It does NOT connect to DB directly
+
+Basic url calling method in browser and Postman
+| Type | URL             | File    | Output | Use     |
+| ---- | --------------- | ------- | ------ | ------- |
+| Web  | `/personal`     | web.php | HTML   | Browser |
+| API  | `/api/personal` | api.php | JSON   | Postman |
+ 
+1. first create api.php file inside the routes folder and add the web routes
+2. Then add the api.php file path in app.php file inside the bootstrap folder
+    (example inside code):
+     web: __DIR__.'/../routes/web.php',
+        api: __DIR__.'/../routes/api.php',
+        commands: __DIR__.'/../routes/console.php',
+        health: '/up',
+3.Then add the url path in postman like how we run the project in browser
+  (eg url in postman:
+     http://localhost/crud_ajax_tailwind/public/api/personal  --- XAMPP
+     http://127.0.0.1:8000/api/personal   --- php artisan serve)
+
+4. change the header key and value in postman for update and add data and other operations
+   key = Content-Type
+   value = application/json
+   Then check the key and value row checkbox is clicked
+
+| Action   | Method | URL                       |
+| -------- | ------ | ------------------------- |
+| Create   | POST   | /api/personal/store       |    //if u want to add data using postmant add that data in json inside body with correct db data format
+| Read All | GET    | /api/personal             |
+| Read One | GET    | /api/personal/{id}        |
+| Update   | PUT    | /api/personal/update/{id} |
+| Delete   | DELETE | /api/personal/{id}        |
+
+
+
+work flow:
+Postman → Laravel (Server) → Controller → Model → Database
+                                   ↓
+                              Response (JSON)
+                                   ↓
+                                Postman
+
+-------------bearer token method----------------
+1. What is Bearer Token?
+👉 A secret key given after login
+👉 Used to access protected APIs
+Bearer Token = Key to access protected API
+
+workflow:
+Login → Get Token → Use Token → Access API
+
+2. Setup Steps
+✔ Install Sanctum
+composer require laravel/sanctum    ---in cmd
+✔ Publish Migration
+php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"    ---in cmd
+✔ Run Migration
+php artisan migrate    ---in cmd
+
+👉 Creates:
+
+personal_access_tokens table
+✔ Add in User Model(user.php inside models folder)
+code:
+use Laravel\Sanctum\HasApiTokens;
+
+class User extends Authenticatable
+{
+    use HasApiTokens;    //its important for generate token and add generate token line with login Controller
+}
+🔐 3. Login → Generate Token (LoginController.php)
+use Illuminate\Support\Facades\Auth;
+
+public function login(Request $request)
+{
+    if (!Auth::attempt($request->only('email', 'password'))) {
+        return response()->json(['message' => 'Invalid credentials']);
+    }
+
+    $user = Auth::user();
+
+    $token = $user->createToken('api-token')->plainTextToken;  // this is important line for generate token after login
+
+    return response()->json([
+        'token' => $token
+    ]);
+}
+🧪 4. Test Login in Postman
+POST:
+/api/login
+Body:
+{
+  "email": "san@gmail.com",
+  "password": "123456"
+}
+🎉 Output:
+{
+  "token": "1|abc123..."
+}
+🔒 5. Protect Routes
+Route::middleware('auth:sanctum')->get('/profile', function (Request $request) {
+    return $request->user();
+});
+
+Real example:(api.php)
+
+Route::middleware('auth:sanctum')->group(function () {
+Route::get('/std', [PageController::class, 'fetchData']);
+Route::post('/store', [PageController::class, 'store']);
+});
+
+📡 6. Use Token in Postman
+🔹 Headers:
+Authorization: Bearer YOUR_TOKEN
+
+Example:
+
+Authorization: Bearer 1|abc123...
+🧪 7. Call Protected API
+GET /api/std
+✅ With Token:
+{
+  "id": 1,
+  "email": "san@gmail.com"
+}
+❌ Without Token:
+{
+  "message": "Unauthenticated."
+}
+🧠 8. Flow
+Login → Token created → Saved in DB
+Request → Token sent → Verified → Access allowed
+
+
+     ------------cURL uses-------------
+cURL stands for client url, It is a tool/library used to send and receive data from URLs or APIs.
+
+In PHP, cURL allows your application to communicate with external servers over:
+(HTTP,HTTPS,FTP,APIs,Web services)
+
+example workflow:
+Your App  --->  cURL Request  --->  External API Server
+Your App  <---  cURL Response <---  External API Server
+            ----- end of cURL-----
+
+--------------routenote------------
+id password for this site
+https://routenote-ui-library.web.app/
+user@routenote.com
+ogRishEviSTR
+
+           -------------
+https://rn.rn-test.com/s/routenote-vs-meta
+https://routenote-ui-library.web.app/create-a-release
+----
+https://routenotetest.com/rn22/create_album     (username=import3 ,password)
+----
+upc 5057302420123  melody
+GX38U2606427 IRSC
+
+UPC: 5063766907520
+GX38U2606429
+            ----------
+id password for testsite rn (https://poc.rn-test.com/poc_up3/public/create-a-release)
+import3  --username
+import@3  --pass
+           ---------
+wifi password for FTTP-5G = welcome@2025
+           -------poc 3-------
+sellers        //poc 3
+sellers@1234
+
+san
+newpassword123  //another username and pass of poc 3 localfile
+
+            --------
+/rap 5054316968832
+
+//rap tune UPC: 5063766519860 ISRC = GX38U2616515
+---------------------recaptcha----------------------
+
+site key = 6Lc6lm4sAAAAADs92O9syfDI8pVUoMKSMOk-U24I
+secret key = 6Lc6lm4sAAAAAGfL8kAkbtr7hkZj1DhsKZL71XEB
+
+
+site key = 6Ldlnm4sAAAAAIOMn2AZ9cvg_kH4182pvOuwetjW
+secret key = 6Ldlnm4sAAAAAG-VTxUSNBhlrYFAuaK9z2OwcSAZ
+
+5054316976905 welcome  (https://routenotetest.com/rn22/editalbum/5054316976905)  21/4/26
+
+-----------Routnote release create field simple summary----------
+A compilation = a collection of songs, usually from different artists.
+A cover = you perform a song written by someone else.
+primary artist = The main artist(s) of the release
+Display artists = Artists shown publicly on the release
+Contributors = People who worked on the song but are not shown publicly
+Songwriters = People who wrote the song (lyrics or composition)
+| Section         | Purpose                                    |
+| --------------- | ------------------------------------------ |
+| Compilation     | Defines release type (VA vs single artist) |
+| Lyrics          | Helps with metadata & royalties            |
+| Covers          | Legal licensing requirement                |
+| Primary Artists | Main owner of release                      |
+| Display Artists | Public-facing credits                      |
+| Contributors    | Behind-the-scenes roles                    |
+| Songwriters     | Legal & royalty ownership                  |
+                   
+    ------end of routenote release create field summary------
+
+---Activity tracker and termaind id password---
+Username: santhoshraj0011@outlook.com         //Activity tracker id password
+Password: santhoshraj0011
+try to update today task in Activity Tracke... by R.Rishi Kumar
+
+Username: santhoshraj0011@outlook.com         //termaind id password
+Password: s@nthoshraj001
+                 ----------------
+
+-----Find file directory-----
+shortcut for finding component inside project folder using cmd
+(dir /s /b SpotifyController.php)  = run this command in cmd
+----------
