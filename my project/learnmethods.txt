@@ -2,8 +2,8 @@
 | -------- | -------------------------- |
 | **GET**  | Fetch / display data       |
 | **POST** | Send / store / update data |
-|  **PUT** |       update data          |
-|**DELETE**|    delete data             |
+  **PUT**       update data
+  **DELETE**    delete data
 
 Part	Meaning
 $_GET =	Read values from URL
@@ -29,14 +29,37 @@ text so you can style or control them without affecting the entire line.
 example-<p>This is a <span style="color:red;">red</span> word.</p>
    <A radio button is an input element in HTML that lets the user select only ONE option from a list.>
 
-ajax means = AJAX allows the webpage to communicate with the server (PHP) without refreshing the entire page.
-Only the required part of the page gets updated ✔
-No screen flicker ✔
-Super fast ✔
-Modern UI ✔
+ajax means = (Asynchronous JavaScript And XML)AJAX allows the webpage to communicate with the server 
+(PHP) without refreshing the entire page.
+
+Only the required part of the page gets updated ✔   You click a button / submit form
+No screen flicker ✔                                 Data is sent in the background
+Super fast ✔                                        Page does NOT reload
+Modern UI ✔                                         Only required data updates
+AJAX lets a web page talk to the server without reloading the page.
 
 JSON = JavaScript Object Notation
 It is a lightweight format to store and transfer data between server (PHP) and browser (JS).
+
+How AJAX and JSON work together
+Most of the time:
+AJAX = sending request
+JSON = data format of response
+Example:
+-AJAX request sent
+-Server returns JSON
+-JavaScript reads JSON
+-Page updates
+-----------work flow of ajax and api and json-------------
+(“AJAX sends request → API receives request → 
+API returns JSON data or message → AJAX shows data in browser”)
+
+🔁 Correct flow (simple)
+-AJAX → sends request (from browser)
+-API / Server → processes request
+-JSON → response format
+-AJAX → reads JSON
+-Browser → displays result
 
 *JavaScript METHODS learn*
 method name = URL.createObjectURL(file)
@@ -125,7 +148,7 @@ windows shortcuts
 
 
 
-----------------LARAVEL LEARN-----------------
+----------------LARAVEL LEARN-----------------🚀
 laravel is popular web framework built on php
 ------important cmd for laravel------
 composer create-project laravel/laravel myproject ----its for create project folder
@@ -196,7 +219,7 @@ STEP 1: Create Layout File
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My Website</title>
+    <title>My Website</title>-
 </head>
 <body>
 
@@ -294,6 +317,17 @@ php artisan tinker
 DB::connection()->getDatabaseName();
 
 ----database basic concepts in laravel----
+Model        = DB connection
+Controller   = Logic
+Route        = URL path
+Request      = Form data
+create()     = Insert data
+save()       = Insert data
+$fillable     = Allow insert
+
+create()	Depositing money
+$fillable	List of allowed deposit fields
+
 1).env File
 
 Used for project settings
@@ -322,9 +356,10 @@ cmd = php artisan migrate
 
 Creates table in database
 View table in phpMyAdmin
-Model
+5)Model
 Model = table representation
 One model per table
+cmd = php artisan make:model Student
 app/Models/
 Example:
 class Larastudent extends Model
@@ -391,6 +426,7 @@ Database
 ✔ Open 127.0.0.1:8000
 ✔ Clear cache after .env change
 ✔ Laravel loves created_at, updated_at
+
 -----upload large file to github using git----
 first go to file path ---> C:\Users\WELCOME\OneDrive\Desktop\Design train
 open cmd in folder and run this command
@@ -402,7 +438,7 @@ git remote add origin https://github.com/USERNAME/REPO_NAME.git
 Do this if GitHub already has README or files==>git pull origin main --allow-unrelated-histories
 git push -u origin main
 Username → GitHub username
-Password → Personal Access Token (eg token generated from github=E3FpZi6ACvje7dFFOqIvzzQ4l4yT3f2LeTTI)
+Password → Personal Access Token (eg token generated from github=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)
 ----- simple notes for remember ------
 git init                  → start git (once)
 git add .                 → add files
@@ -1027,21 +1063,22 @@ transform: scale(1.5);
 | `rnup-p-2`         | Proper padding             |
 | `rnup-text-center` | Center heading             |
 
+----Another way to add tailwind style inside style tag using class name and id name like a normal css using @apply------
+example:
+<div class="employee-container">
+  <h1 class="title">Employee Management</h1>
+</div>
+<style>
+.employee-container {
+  @apply bg-white p-6 rounded-lg shadow-md;
+}
+.title {
+  @apply text-center text-xl font-semibold text-slate-800 mb-5;
+}
+</style>
+---------------------------end of tailwind------------------------------------
 
 
-https://routenote-ui-library.web.app/
-user@routenote.com
-ogRishEviSTR
-
-
-upc 5057302420123  melody
-GX38U2606427 IRSC
-
-UPC: 5063766907520
-
-GX38U2606429
-
-/rap 5054316968832
 
 ------------------vuejs-------------------------
 
@@ -1122,7 +1159,7 @@ axios.get('/users')
 | Feature               | fetch                 | axios            |
 | --------------------- | --------------------- | ---------------- |
 | Type                  | Built-in JavaScript   | External library |
-| Install needed?       | ❌ No                  | ✅ Yes            |
+| Install needed?       | ❌ No                  | ✅ Yes         |
 | JSON handling         | Manual (`res.json()`) | Automatic        |
 | Error handling        | Manual check          | Better built-in  |
 | Older browser support | Limited               | Better           |
@@ -1255,7 +1292,7 @@ Inside .catch():
 
 });
 
-| jQuery -ajax          | Axios                 |
+| jQuery -ajax          | Axios            |
 | ---------------- | --------------------- |
 | error(xhr)       | .catch(error)         |
 | xhr.responseText | error.response.data   |
@@ -1359,8 +1396,8 @@ class newVueController extends Controller
 
 | Concept   | Direction       |
 | --------- | --------------- |
-| Props     | Parent ➜ Child  |
-| Emit      | Child ➜ Parent  |
+| Props     | Parent ➜ Child |
+| Emit      | Child ➜ Parent |
 | Computed  | Calculate value |
 | Watch     | Detect change   |
 | Lifecycle | Auto run        |
@@ -1375,8 +1412,14 @@ class newVueController extends Controller
 | `v-for`   | Loop            |
 | `v-model` | Two-way binding |  <input type="text" class="input" v-model="newUser" placeholder="Enter your name"/>
 | `v-bind`  | Bind attribute  |v-bind :	Attribute bind
-| `v-on`    | Events          |v-on @	Event
+| `v-on`    | Events          |v-on   @	Event
 
+| Method             | What Happens                |
+| ------------------ | --------------------------- |
+| `v-if`             | Element **added / removed** |   Element exists only when condition is true
+| `v-show`           | Element stays, only hidden  |
+| `:disabled`        | view but not clickable      |
+| CSS `display:none` | Browser hides only          |
 
 -----------------------------vue tutorial from yt this example code have inside the vue_yt folder--------------------------
 
@@ -1394,7 +1437,7 @@ class newVueController extends Controller
 12.emitting events to the Parent
 13.retrieving events from the Child
 14.basic form validation
-15.computer properties
+15.computed properties
 16.conditionls
 17.adding a reference
 18.making asynchronous rest api calls
@@ -1636,8 +1679,7 @@ Reactive data = data that automatically updates the view when its value changes.
                                                      Child component receives it as a prop and displays it in a table -->
 
 <------------------------------other commands continue on component files inside vue_yt folder--------------------------------->
-
-       ---------------params----------------
+        ---------------params----------------
 this.$router.push({ name:'marks', params:{ id:id } })   // params = data passed through the URL path 
               (think like (params= URL variable))
 params = values passed inside the URL to identify a specific record or page.
@@ -1947,6 +1989,10 @@ newpassword123  //another username and pass of poc 3 localfile
 
 //rap tune UPC: 5063766519860 ISRC = GX38U2616515
 ---------------------recaptcha----------------------
+secret key 6LeOFGssAAAAAN3JEYG7jridE7pRp12VPER_s5o5
+site key 
+
+
 
 site key = 6Lc6lm4sAAAAADs92O9syfDI8pVUoMKSMOk-U24I
 secret key = 6Lc6lm4sAAAAAGfL8kAkbtr7hkZj1DhsKZL71XEB
@@ -1954,6 +2000,13 @@ secret key = 6Lc6lm4sAAAAAGfL8kAkbtr7hkZj1DhsKZL71XEB
 
 site key = 6Ldlnm4sAAAAAIOMn2AZ9cvg_kH4182pvOuwetjW
 secret key = 6Ldlnm4sAAAAAG-VTxUSNBhlrYFAuaK9z2OwcSAZ
+
+release
+compile
+cover
+5063766120660 new test
+
+5054316925934 just_test
 
 5054316976905 welcome  (https://routenotetest.com/rn22/editalbum/5054316976905)  21/4/26
 
@@ -1975,7 +2028,6 @@ Songwriters = People who wrote the song (lyrics or composition)
 | Songwriters     | Legal & royalty ownership                  |
                    
     ------end of routenote release create field summary------
-
 ---Activity tracker and termaind id password---
 Username: santhoshraj0011@outlook.com         //Activity tracker id password
 Password: santhoshraj0011
@@ -1984,8 +2036,22 @@ try to update today task in Activity Tracke... by R.Rishi Kumar
 Username: santhoshraj0011@outlook.com         //termaind id password
 Password: s@nthoshraj001
                  ----------------
-
------Find file directory-----
+-----find file directory-----
 shortcut for finding component inside project folder using cmd
 (dir /s /b SpotifyController.php)  = run this command in cmd
 ----------
+
+----Spotify api----
+👉 client_id
+👉 client_secret
+👉 access_token (generated using above)
+
+client id = f647cb6b67444d589530e54d72cacc79
+client secret = e5941bb0c21a409ba9298942868923af
+
+app name = Release Rap
+----------------------
+
+
+
+
