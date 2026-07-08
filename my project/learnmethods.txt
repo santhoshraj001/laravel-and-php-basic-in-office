@@ -2,11 +2,11 @@
 | -------- | -------------------------- |
 | **GET**  | Fetch / display data       |
 | **POST** | Send / store / update data |
-  **PUT**       update data
-  **DELETE**    delete data
+|  **PUT**   |   update data            |
+| **DELETE** |   delete data            |
 
 Part	Meaning
-$_GET =	Read values from URL
+$_GET   =	Read values from URL
 isset() =	Check if value exists
 == means	Compare values
 &&	= Both conditions must be true THIS name is AND Operator
@@ -323,7 +323,7 @@ Route        = URL path
 Request      = Form data
 create()     = Insert data
 save()       = Insert data
-$fillable     = Allow insert
+$fillable    = Allow insert
 
 create()	Depositing money
 $fillable	List of allowed deposit fields
@@ -884,7 +884,7 @@ update() = where(id) → update
 
  // url: "/poc_up3/public/personal/store",    this for create path without named route in ajax
 
- | Field type   | jQuery value method                    |
+| Field type   | jQuery value method                    |
 | ------------ | -------------------------------------- |
 | text / email | `$('#id').val()`                       |
 | select       | `$('#id').val()`                       |
@@ -947,7 +947,7 @@ $('#personalform').on('submit', function(e) {
 });
 | Using       | Button type                 |
 | ----------- | --------------------------- |
-| AJAX only   | `type="button"` ✅           |
+| AJAX only   | `type="button"` ✅          |
 | Normal form | `type="submit"`             |
 | Both        | `submit + preventDefault()` |
 
@@ -1954,6 +1954,74 @@ Your App  --->  cURL Request  --->  External API Server
 Your App  <---  cURL Response <---  External API Server
             ----- end of cURL-----
 
+-----uses of MIME and getID3 library-----
+MIME type (Multipurpose Internet Mail Extensions) is a file format identifier that tells the server what type of file is being uploaded (e.g., audio/mpeg for MP3, audio/flac for FLAC).
+mimes is a Laravel validation rule used inside $request->validate().
+getID3 = is a PHP library used to extract metadata and technical information from audio and video files.
+(WHAT IS RIFF = RIFF (Resource Interchange File Format) is the container format used by WAV audio files, so getID3 may report a WAV file's dataformat as "riff" instead of "wav")
+----end of mime and getID3 library----
+
+---uses of sanitize in audio upload function---
+(We sanitize audio tag values to remove special characters and escape sequences before storing them in the database, ensuring clean and consistent metadata.)
+eg:
+$artistFromTag = $audioTags['artist'] ?? '';
+$sanitizeTag = fn ($value) =>  // sanitize used to remove commas, double quotes, and single quotes for audio tags
+    str_replace([',', '"', "'"], '', stripslashes($value));
+
+$artistFromTag = $sanitizeTag($artistFromTag);
+----end of sanitize----
+
+----what is MD5----
+MD5 (Message Digest 5) is a hashing algorithm that converts a file's content into a fixed unique string (hash).
+=> A hash converts data into a unique fixed-length value, mainly used for verification, duplicate detection, and password storage.
+=> md5_file() generates a unique fingerprint(unique string) from the file's content like bitrate, artist,duration and other details from audio
+   not from its filename.
+
+Example:
+audio.mp3 → MD5 Hash → 5d41402abc4b2a76b9719d911017c592 (used to detect duplicate files).
+---End of MD5----
+---- Difference between hash and encryption and decryption ----
+=> Hash (single line): Hashing is used to securely verify data (such as passwords or files) by 
+   converting it into a fixed unique value that cannot be reversed.
+
+=> Encryption: Converts readable data into unreadable data using a key.
+Example:
+Password: mypass123
+Encrypted: X7@kP#9Lm
+
+=> Decryption: Converts encrypted data back to the original readable data using the key.
+Example:
+X7@kP#9Lm → mypass123
+
+=> Password Authentication Example:
+User password: mypass123
+Stored hash: 5f4dcc3b5aa765d61d8327deb882cf99
+(Definition of this pass authentication example):
+    During login, the entered password is hashed again and compared with the stored hash. 
+    If both hashes match, authentication succeeds.
+
+=> Difference in one line: Encryption can be decrypted back to the original value, 
+   whereas hashing is one-way and cannot be reversed.
+---- end of hast and encryption and decryption differences----
+
+---Meaning of ISRC----
+What is an ISRC?
+ISRC (International Standard Recording Code) is a unique 12-character code used to identify a specific sound recording.
+Example:
+USRC17607839
+Format:
+CCXXXYYNNNNN
+CC     = Country Code (US)
+XXX    = Registrant Code (RC1)
+YY     = Year (76)
+NNNNN  = Unique Recording Number (07839)
+---- end of ISRC-----
+
+-----uses of encode and decode----
+json_encode() → Converts a PHP array/object into a JSON string for storing or sending.
+json_decode() → Converts a JSON string back into a PHP array/object for use in your application.
+----end of encode and decode-----
+
 --------------routenote------------
 id password for this site
 https://routenote-ui-library.web.app/
@@ -1979,36 +2047,16 @@ import@3  --pass
 wifi password for FTTP-5G = welcome@2025
            -------poc 3-------
 sellers        //poc 3
-sellers@1234
+Seller@1234  -- first S caps
 
 san
 newpassword123  //another username and pass of poc 3 localfile
-
             --------
-/rap 5054316968832
 
-//rap tune UPC: 5063766519860 ISRC = GX38U2616515
 ---------------------recaptcha----------------------
-secret key 6LeOFGssAAAAAN3JEYG7jridE7pRp12VPER_s5o5
-site key 
-
-
-
 site key = 6Lc6lm4sAAAAADs92O9syfDI8pVUoMKSMOk-U24I
 secret key = 6Lc6lm4sAAAAAGfL8kAkbtr7hkZj1DhsKZL71XEB
 
-
-site key = 6Ldlnm4sAAAAAIOMn2AZ9cvg_kH4182pvOuwetjW
-secret key = 6Ldlnm4sAAAAAG-VTxUSNBhlrYFAuaK9z2OwcSAZ
-
-release
-compile
-cover
-5063766120660 new test
-
-5054316925934 just_test
-
-5054316976905 welcome  (https://routenotetest.com/rn22/editalbum/5054316976905)  21/4/26
 
 -----------Routnote release create field simple summary----------
 A compilation = a collection of songs, usually from different artists.
@@ -2028,6 +2076,14 @@ Songwriters = People who wrote the song (lyrics or composition)
 | Songwriters     | Legal & royalty ownership                  |
                    
     ------end of routenote release create field summary------
+----Meaning of explicit and cleaned version of song-----
+| Option           | Meaning                                | Example                                          |
+| ---------------- | -------------------------------------- | ------------------------------------------------ |
+| **Not Explicit** | Song never contained offensive content | Instrumental, devotional, normal pop song        |
+| **Explicit**     | Song contains offensive/adult language | Rap song with swear words                        |
+| **Cleaned**      | Edited version of an explicit song     | Same rap song with swear words muted or replaced |
+-----end of explicit-------
+
 ---Activity tracker and termaind id password---
 Username: santhoshraj0011@outlook.com         //Activity tracker id password
 Password: santhoshraj0011
@@ -2036,7 +2092,7 @@ try to update today task in Activity Tracke... by R.Rishi Kumar
 Username: santhoshraj0011@outlook.com         //termaind id password
 Password: s@nthoshraj001
                  ----------------
------find file directory-----
+----------
 shortcut for finding component inside project folder using cmd
 (dir /s /b SpotifyController.php)  = run this command in cmd
 ----------
@@ -2052,6 +2108,29 @@ client secret = e5941bb0c21a409ba9298942868923af
 app name = Release Rap
 ----------------------
 
+----mysql query----
+UPDATE upc SET `status` =0, `available_status` =0;
+DESCRIBE table_name;  --finding table structure
+SELECT * FROM `table_name` WHERE upc='546754635675';  --find particular value
+-----end of mysql query----
 
+------ sql run in cmd ------
+D:\xampp\mysql\bin>mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 822
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
 
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
 
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> use moderation_new
+Database changed
+MariaDB [moderation_new]>
+-----------
+
+----Get file content in terminal inside vsCode----
+Get-Content routes/web.php    --> add this in terminal with file route path
+Get-Content package.json
+----end of get file content in terminal----
