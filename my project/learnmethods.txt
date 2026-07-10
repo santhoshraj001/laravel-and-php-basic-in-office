@@ -1403,6 +1403,18 @@ class newVueController extends Controller
 | Lifecycle | Auto run        |
 | v-for     | Loop data       |
 | Router    | Page navigation |
+| Feature      | Use When                                                                              |
+| ------------ | ------------------------------------------------------------------------------------- |
+| **Props**    | Send data from parent to child                                                        |
+| **Emit**     | Notify parent or send data from child to parent                                       |
+| **Computed** | Calculate values from existing reactive data (totals, full names, filtered lists)     |
+| **Watch**    | React to data changes by performing side effects (API calls, saving data, validation) |
+
+easy to remember:
+Props     = Parent → Child (Send Data)
+Emit      = Child → Parent (Send Event/Data)
+Computed  = Calculate & Return a Value
+Watch     = Observe Changes & Perform an Action
 
 | Directive | Purpose         |
 | --------- | --------------- |
