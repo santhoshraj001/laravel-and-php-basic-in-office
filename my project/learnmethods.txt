@@ -145,6 +145,8 @@ windows shortcuts
 | **Win + Ctrl + D**     | New virtual desktop |
 | **Win + Ctrl + ← / →** | Switch desktops     |
 | **Win + .**            | Emoji panel 😊      |
+| **shift + alt + f **   | Format or align the entire file|
+
 
 
 
@@ -638,7 +640,12 @@ explode() → String to array
 where() → Target row
 insert() → New data
 update() → Modify data
-
+DB::commit() → saves all successful database changes permanently.
+DB::rollBack() → Undo all database changes made in the current transaction if an error occurs.
+----uses of dd and dump request in controller----
+dd($request->all())  = [dd()] = Dump + Die (prints the data and stops the program).
+dump($request->all()) = [dump()] = Dump only (prints the data and continues the program).
+		-----------
 -----Delete operation in curd-----
 Controller Method
 public function delete($id)
@@ -907,8 +914,72 @@ POST / PUT / DELETE in Laravel ALWAYS need CSRF token
 
 
 
-.map() = loop + collect values (.map() is used to loop through multiple elements and transform them)
-.get() = convert to array
+1).map() = loop + collect values (.map() loops through every item in an array and returns a new array.It does not change the original array.)
+example program for .map():
+
+let numbers = [1, 2, 3, 4];
+let doubled = numbers.map(num => num * 2);
+console.log(doubled);
+output: [2, 4, 6, 8]
+original array: [1,2,3,4]
+
+2).filter() = Returns only the items that satisfy a condition.
+eg program for .filter():
+
+let numbers=[10,20,30,40];
+let result=numbers.filter(num=>num>20);
+console.log(result);
+output:[30,40]
+
+3).find() = Returns the first matching item.
+eg program for .find():
+let users=[
+{id:1,name:"San"},
+{id:2,name:"John"}];
+let user=users.find(user=>user.id==2);
+console.log(user);
+output:{id:2,name:"John"}
+
+4)includes() = Check Whether a Value Exists
+eg program for include()
+let skills=["Vue","Laravel","PHP"];
+console.log(skills.includes("Vue"));
+output: true
+console.log(skills.includes("Python"));
+output: false
+
+5)splice() - Remove/Add Items
+let fruits=["Apple","Orange","Banana"];
+fruits.splice(1,1);
+console.log(fruits);
+output: ["Apple","Banana"]
+
+Explanation: splice(startIndex,numberOfItems)
+example for add an item:
+fruits.splice(1,0,"Mango");
+output: ["Apple","Mango","Orange","Banana"]
+
+6)Spread Operator (...) = used to Copy arrays or objects.
+eg program for this spread operator:
+let arr1=[1,2,3];
+let arr2=[...arr1];
+console.log(arr2);
+output: [1,2,3]
+object example:
+let user={
+name:"San",
+age:25
+};
+let newUser={...user};
+console.log(newUser);
+output:{
+name:"San",
+age:25
+}
+
+7).find() = Stops searching after finding the first match
+8).filter() = Checks every item in the array then Returns a new array containing all matches.
+9).get() = convert to array
 Used only when multiple values exist
 eg code:its for collect checkbox values
 skills: $('input[name="skills"]:checked')
@@ -1077,7 +1148,18 @@ example:
 }
 </style>
 ---------------------------end of tailwind------------------------------------
-
+------------------ Error meaning with status code ----------------------
+| Code | Meaning          |
+| ---- | ---------------- |
+| 200  | Success          |
+| 201  | Created          |
+| 400  | Bad Request      |
+| 401  | Unauthorized     |
+| 404  | Route Not Found  |
+| 419  | CSRF Error       |
+| 422  | Validation Error |
+| 500  | Server Error     |
+------- end of error meaning and status code --------
 
 
 ------------------vuejs-------------------------
@@ -1305,7 +1387,8 @@ In Vue:
 ✔ Check error.response.status
 ✔ Store errors inside data()
 ✔ Show errors using v-if
-
+✔ use .finally() for Always executes in the logic or condition.
+✔ $request->all(); used to get all data
 ----------------comparison of jQuery ajax and axios---------------
 | Project Type  | Best Choice          |
 | ------------- | -------------------- |
@@ -1403,12 +1486,15 @@ class newVueController extends Controller
 | Lifecycle | Auto run        |
 | v-for     | Loop data       |
 | Router    | Page navigation |
+
 | Feature      | Use When                                                                              |
 | ------------ | ------------------------------------------------------------------------------------- |
 | **Props**    | Send data from parent to child                                                        |
 | **Emit**     | Notify parent or send data from child to parent                                       |
 | **Computed** | Calculate values from existing reactive data (totals, full names, filtered lists)     |
 | **Watch**    | React to data changes by performing side effects (API calls, saving data, validation) |
+| **Mounted()**| Runs after page loads								       |
+
 
 easy to remember:
 Props     = Parent → Child (Send Data)
@@ -1626,7 +1712,112 @@ eg code is employee_forms.vue file
 18.making asynchronous rest api calls
 19.Lifecycle methods
 20.deploying production build
+22.slots, Lifecycle Hooks, refs
 
+1. Slots
+Definition
+
+A slot is used to pass HTML content from the Parent component to the Child component.
+
+Simple Definition:
+
+Slots allow the parent to insert custom HTML inside a child component.
+
+Real-Life Example
+
+Think of a gift box.
+
+Child Component = Empty Gift Box 📦
+Parent Component = Puts a Gift 🎁 inside the box
+Parent
+   │
+   │ HTML
+   ▼
+Child (Slot)
+Example
+Child Component (Card.vue)
+<template>
+    <div class="card">
+        <slot></slot>
+    </div>
+</template>
+Parent Component
+<template>
+    <Card>
+        <h2>Employee Details</h2>
+    </Card>
+</template>
+Output
+<div class="card">
+    <h2>Employee Details</h2>
+</div>
+Slot
+
+✔ Parent → Child
+✔ Pass HTML content
+✔ Used for reusable UI
+
+2. Lifecycle Hooks
+Definition
+
+Lifecycle hooks are methods that run automatically during a component's life.
+
+Flow
+created()
+     ↓
+mounted()
+     ↓
+updated()
+     ↓
+unmounted()
+Example
+mounted() {
+    console.log("Component Loaded");
+}
+Common Hooks
+Hook	When it Runs
+created()	Component created
+mounted()	HTML rendered,Runs after page loads.
+updated()	Data changed
+unmounted()	Component removed
+Use
+Load API data
+Initialize plugins
+Clean up timers/events
+
+Remember:
+Lifecycle Hooks = Automatic functions during component life.
+
+3. Refs
+Definition
+
+ref gives direct access to a DOM element or child component.
+
+Example
+<input ref="username">
+
+<button @click="focusInput">
+    Focus
+</button>
+methods:{
+    focusInput(){
+        this.$refs.username.focus();
+    }
+}
+Use
+Focus input
+Access DOM
+Call child component methods
+
+Remember:
+ref = Directly access an element.
+
+easy to remember:
+| Concept             | Simple Definition                                          | Direction      | Common Uses                            |
+| ------------------- | ---------------------------------------------------------- | -------------- | -------------------------------------- |
+| **Slot**            | Parent inserts HTML into a child component                 | Parent → Child | Cards, Modals, Layouts                 |
+| **Lifecycle Hooks** | Functions that run automatically during a component's life | Automatic      | API calls, initialization, cleanup     |
+| **Refs**            | Direct access to DOM elements or child components          | Direct Access  | Focus inputs, scroll, DOM manipulation |
 
 
 --------------------pass data from parent to child-----------------
@@ -2016,6 +2207,10 @@ Stored hash: 5f4dcc3b5aa765d61d8327deb882cf99
    whereas hashing is one-way and cannot be reversed.
 ---- end of hast and encryption and decryption differences----
 
+---meaning of mono and stereo ---
+Mono = 1 audio channel (e.g., one speaker gets the same sound); Stereo = 2 audio channels (left + right speakers can have different sounds).
+---end of mono and stereo---
+
 ---Meaning of ISRC----
 What is an ISRC?
 ISRC (International Standard Recording Code) is a unique 12-character code used to identify a specific sound recording.
@@ -2034,6 +2229,9 @@ json_encode() → Converts a PHP array/object into a JSON string for storing or 
 json_decode() → Converts a JSON string back into a PHP array/object for use in your application.
 ----end of encode and decode-----
 
+finding browser timezone = (console.log(Intl.DateTimeFormat().resolvedOptions().timeZone);)
+finding browser timezone offset = (console.log(`GMT${(-new Date().getTimezoneOffset() >= 0 ? '+' : '-')}${String(Math.floor(Math.abs(new Date().getTimezoneOffset()) / 60)).padStart(2, '0')}:${String(Math.abs(new Date().getTimezoneOffset()) % 60).padStart(2, '0')}`);)
+
 --------------routenote------------
 id password for this site
 https://routenote-ui-library.web.app/
@@ -2044,7 +2242,7 @@ ogRishEviSTR
 https://rn.rn-test.com/s/routenote-vs-meta
 https://routenote-ui-library.web.app/create-a-release
 ----
-https://routenotetest.com/rn22/create_album     (username=import3 ,password)
+https://routenotetest.com/rn22/create_album     (username=import3 ,password  import@3)
 ----
 upc 5057302420123  melody
 GX38U2606427 IRSC
@@ -2059,16 +2257,36 @@ import@3  --pass
 wifi password for FTTP-5G = welcome@2025
            -------poc 3-------
 sellers        //poc 3
-Seller@1234  -- first S caps
+Seller@1234  -- first S caps  or Sellers@1234
 
 san
 newpassword123  //another username and pass of poc 3 localfile
-            --------
 
+            --------
+/rap 5054316968832
+
+//rap tune UPC: 5063766519860 ISRC = GX38U2616515
 ---------------------recaptcha----------------------
+secret key 6LeOFGssAAAAAN3JEYG7jridE7pRp12VPER_s5o5
+site key 
+
+
+
 site key = 6Lc6lm4sAAAAADs92O9syfDI8pVUoMKSMOk-U24I
 secret key = 6Lc6lm4sAAAAAGfL8kAkbtr7hkZj1DhsKZL71XEB
 
+
+site key = 6Ldlnm4sAAAAAIOMn2AZ9cvg_kH4182pvOuwetjW
+secret key = 6Ldlnm4sAAAAAG-VTxUSNBhlrYFAuaK9z2OwcSAZ
+
+release
+compile
+cover
+5063766120660 new test
+
+5054316925934 just_test
+
+5054316976905 welcome  (https://routenotetest.com/rn22/editalbum/5054316976905)  21/4/26
 
 -----------Routnote release create field simple summary----------
 A compilation = a collection of songs, usually from different artists.
@@ -2096,6 +2314,38 @@ Songwriters = People who wrote the song (lyrics or composition)
 | **Cleaned**      | Edited version of an explicit song     | Same rap song with swear words muted or replaced |
 -----end of explicit-------
 
+align particular selected code in vscode = ((ctrl+shift+p) then select Reindent Selected Lines (if available))
+
+---------------------------
+                          
+------------------------checkpage -6/4/2026
+https://routenote-ui-library.web.app/create-a-release
+https://routenote-ui-library.web.app/reports
+
+------checkpage - 8/4/2026
+1. changing style in edit data code enter field option (MOBILE AND DESKTOP)
+2. content change in adminsettings->communication preferences
+3. moving little bit that plus icon button in profile complete percentage field 
+   in mobile view(iphone XR and SE and 12pro and 14pro max)
+4. moving little bit that plus icon button in top of profile complete field in mobile view(iphone SE)
+5. after i click the save button in personal information page
+   is showing only [test] saved not showing(your personal information has been updated)
+6.  recaptcha not loading in username update in login-security
+7. text align change in email update in login-security(iphone SE)
+
+----
+
+1. Field align change in unlock edit option in login-security 
+ (https://routenote-ui-library.web.app/account-settings/login-security)
+
+2. Text align change in email update in login-security(iphone SE)
+ (https://routenote-ui-library.web.app/account-settings/login-security/email-address)
+
+3. change size of plus icon in accountsettings overview page(iphone SE and XR)
+  (https://routenote-ui-library.web.app/account-settings/overview)
+
+--end of 8/4/2026--
+
 ---Activity tracker and termaind id password---
 Username: santhoshraj0011@outlook.com         //Activity tracker id password
 Password: santhoshraj0011
@@ -2120,11 +2370,45 @@ client secret = e5941bb0c21a409ba9298942868923af
 app name = Release Rap
 ----------------------
 
+upc 21/4/26 = 5063766167177
+
+5057302798536
+
+
+
 ----mysql query----
 UPDATE upc SET `status` =0, `available_status` =0;
 DESCRIBE table_name;  --finding table structure
 SELECT * FROM `table_name` WHERE upc='546754635675';  --find particular value
------end of mysql query----
+SELECT * FROM `audio_metadata` WHERE vid='82' ORDER BY `tag` ASC;  == filter data in asscending order like A -> Z and (DESC = Z -> A)
+SELECT * FROM `route_audio_distribution` WHERE nid='159' AND did NOT IN (12,13,15,37,44,45,58) AND wid!=0; = filter the value without wid is 0 and not in values
+SELECT * FROM `route_distributors` WHERE did IN (5,18,20,23,25,29,36);  =filter only the mention did value from the table list
+
+
+5063766948530
+
+5063766135374 old
+
+
+5063766853001
+
+5063766100051
+5054316741541
+
+5063766517774 COMPILE Yes
+
+5063766824032
+
+create release alternative anime select drop down issue
+Contributor drop down issue(remixer missing)
+timezone
+
+
+5063766641929
+
+5054316063162
+
+
 
 ------ sql run in cmd ------
 D:\xampp\mysql\bin>mysql -u root -p
@@ -2146,3 +2430,77 @@ MariaDB [moderation_new]>
 Get-Content routes/web.php    --> add this in terminal with file route path
 Get-Content package.json
 ----end of get file content in terminal----
+
+--next assigned task adding function of track metadata and track metadata form submit using module file-- 18/6/26
+--change the validation compared with old cloud_upload()function and api app file -16/6/26
+
+
+how to debug and learning debug next task -8/7/2026
+js and vue and laravel methods learning pending - 17/7/2026
+
+--------localisation uses in release flow-------
+Localisation means adapting the release information for a particular market/language.
+Localisation — simple meaning
+
+Localisation means changing the release information for a specific country or language.
+
+Example:
+
+Original release:
+
+Album: My World
+Artist: John
+Language: English
+
+For Japan:
+
+Album: 私の世界
+Artist: ジョン
+Language: Japanese
+
+So:
+
+Store selection → Where will the music be distributed? (Spotify, Apple Music, etc.)
+Localisation → How should the release information appear in a particular country/language?
+
+In short: Localisation = country/language-specific release information.
+-------end of localisation information--------
+
+
+-------db table truncate queries-------
+DELETE FROM `album_metadata` WHERE `upc_id` !='5054316001300';
+DELETE FROM `upc_distribution` WHERE `upcid` !='5054316001300';
+DELETE FROM `audio` WHERE `upc` !='5054316001300';
+DELETE FROM `discography_api_report` WHERE `upc` !='5054316001300';
+DELETE FROM `discography_api_details` WHERE `upc` !='5054316001300';
+DELETE FROM `release_table` WHERE `upc` !='5054316001300';
+DELETE FROM `route_audio_distribution` WHERE `nid` !='9850987';
+DELETE FROM `myuploaded_audio_report` WHERE `upc` !='5054316001300';
+DELETE FROM `audio_metadata` WHERE `vid` !='9762292' AND `vid` !='9762317';
+TRUNCATE TABLE `moderation_new`.`composer_lyricist`;
+TRUNCATE TABLE `moderation_new`.`contributors_table`;
+TRUNCATE `user_trace_log`;
+UPDATE upc SET `status`=0,`available_status`=0;
+DELETE FROM node_revisions WHERE nid!='9850987';
+DELETE FROM node WHERE nid!='9850987';
+TRUNCATE TABLE `moderation_new`.`files`;
+TRUNCATE TABLE `moderation_new`.`price`;
+TRUNCATE TABLE `moderation_new`.`track_table`;
+
+		-------------
+
+-----basic base xampp and laravel url-----
+http://localhost/poc_up3/public/earnings
+http://127.0.0.1:8000/usermanagement  == php artisan serve development server
+http://localhost:8000/api/activateScratchCardddd  == postman api checking url
+---------end of basic base xampp and laravel url-----
+
+----use of npm run commands----
+ Laravel Mix			Vite
+npm run watch	            npm run dev
+npm run production	    npm run build
+webpack.mix.js	            vite.config.js  ==check the scripts{} tag inside package.json
+		===============
+npm install = You normally only need npm install when setting up the project for the first time or when dependencies change.
+npm run watch = is generally used to continuously monitor your frontend source files and rebuild assets whenever you save changes.
+----end of npm run commands----
